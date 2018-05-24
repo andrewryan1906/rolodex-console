@@ -6,8 +6,8 @@ import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import clean from 'lodash-clean';
 import * as nameParser from 'parse-full-name';
-
 import {Contact} from '@rhythmsoftware/rolodex-angular-sdk/model/contact';
+import * as  googlePhoneNumberLib from 'google-libphonenumber';
 
 
 @Component({
@@ -51,6 +51,8 @@ export class CreateContactComponent implements OnInit {
       nickname: '',
       organization_id: '',
       job_title: '',
+      phone_number: '',
+      phone_number_ext: '',
       work_phone_number: '',
       title: '',
       contact_role_ids: '',
@@ -68,6 +70,7 @@ export class CreateContactComponent implements OnInit {
       notes: ''
     });
 
+    // hook up the name parser
     this.contactForm.get('name').valueChanges.subscribe(name => {
 
       // we don't want to run this if someone has changed one of the
@@ -98,6 +101,27 @@ export class CreateContactComponent implements OnInit {
         console.error('could not parse name: ' + JSON.stringify(nameparts.error));
       }
     });
+
+  }
+
+  formatPhoneNumber() {
+
+    const phone = this.contactForm.get('phone_number').value;
+    const PNF = googlePhoneNumberLib.PhoneNumberFormat;
+    console.log('phone');
+
+    const phoneUtil = googlePhoneNumberLib.PhoneNumberUtil.getInstance();
+
+    const number = phoneUtil.parseAndKeepRawInput(phone, 'US');
+
+
+    const typeOfFormat = phoneUtil.getRegionCodeForNumber(number) === 'US' ? PNF.NATIONAL : PNF.INTERNATIONAL;
+    const formattedPhone =  phoneUtil.format(number,  typeOfFormat);
+
+
+    this.contactForm.patchValue({phone_number: formattedPhone});
+
+
   }
 
   initControls(): void {
@@ -109,7 +133,7 @@ export class CreateContactComponent implements OnInit {
 
   }
 
-  shouldShowFormErrorFor(field: string ) {
+  shouldShowFormErrorFor(field: string) {
     return this.contactForm.controls[field].errors && this.contactForm.controls[field].touched;
   }
 

@@ -26,7 +26,6 @@
     "./node_modules/angular2-masonry/index.ts",
     "./node_modules/ngx-image-gallery/index.ts",
     "./node_modules/@rhythmsoftware/rolodex-angular-sdk/**/*",
-    "./node_modules/@rhythmsoftware/system-angular-sdk/**/*",
-    "./node_modules/parse-full-name/system-angular-sdk/**/*"
+    "./node_modules/@rhythmsoftware/system-angular-sdk/**/*"
   ]
 }

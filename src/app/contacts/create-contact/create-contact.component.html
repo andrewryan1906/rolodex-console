@@ -1,0 +1,350 @@
+<h4 class="font-weight-bold py-3 mb-4">
+  <span class="text-muted font-weight-light">Rolodex /</span> Add a Contact
+</h4>
+
+
+  <div class="alert alert-warning alert-dismissible fade show rs-max-panel-width" role="alert">
+    <strong>Warning:</strong> The ability to create contacts exists for testing and diagnostic purposes. Generally, you
+    should be creating contact
+    records in the Rhythm application
+    to which the contact is applicable.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+
+<form [formGroup]="contactForm" (ngSubmit)="save()">
+
+  <ngb-tabset class="nav-tabs-top  profile-tab rs-max-panel-width profile-tabset">
+
+    <ngb-tab title="Basic Profile Info" class="profile-tab">
+      <ng-template ngbTabContent>
+        <div class="card-body">
+
+
+          <div class="col-sm-12 ">
+
+            <div class="row">
+
+              <div class="form-group col-sm-2 user-avatar">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                  <button type="button" class="btn btn-default btn-take-photo"><i
+                    class="fas fa-camera-retro"> </i>
+
+                    Photo
+                  </button>
+                </div>
+              </div>
+
+              <div class="col-sm-10">
+                <div class="row">
+
+                  <div class="form-group col-sm-6 ">
+                    <label class="form-label">First Name:</label>
+                    <input class="form-control" type="text" tabindex="10" autofocus
+                           formControlName="first_name">
+
+                  </div>
+
+                  <div class="form-group  col-sm-6">
+                    <label class="form-label">Last Name:</label>
+                    <input class="form-control" type="text" tabindex="20" formControlName="last_name">
+
+                  </div>
+
+
+                  <div class="form-group col-sm-6 ">
+                    <label class="form-label">E-Mail:</label>
+                    <input class="form-control" type="text" tabindex="30" formControlName="email_address">
+                  </div>
+
+                  <div class="col-sm-6 align-bottom potential-duplicates d-none">
+
+                      <span class="duplicate-checking-no-duplicates" style="display: block">
+              No duplicates detected. <i class="fas fa-check"></i></span>
+                    <span class="duplicate-checking-duplicates-detected" style="display: block">
+              <i class="ion ion-ios-warning"></i> 5 potential duplicate records found. <a href="#">(view)</a></span>
+
+                  </div>
+                  <!--<div class="form-group col-sm-6 social-lookup">-->
+
+
+                  <!--<button type="button" class="btn btn-success "><i-->
+                  <!--class="fas fa-linkedin social-lookup-icon"></i> Social Lookup-->
+                  <!--</button>-->
+
+
+                  <!--</div>-->
+
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Additional Profile Info">
+      <ng-template ngbTabContent>
+        <div class="card-body">
+          <div class="row ">
+
+            <div class="form-group col-sm-3">
+
+              <label class="form-label">Prefix:</label>
+
+              <select class="form-control" formControlName="prefix" name="Prefix">
+                <option></option>
+                <option>Mr.</option>
+                <option>Mrs.</option>
+                <option>Ms.</option>
+                <option>Dr.</option>
+              </select>
+
+            </div>
+            <div class="form-group  col-sm-3 ">
+              <label class="form-label">Middle:</label>
+              <input class="form-control" type="text" tabindex="20" formControlName="middle_name">
+            </div>
+            <div class="form-group col-sm-3">
+              <label class="form-label">Suffix:</label>
+
+              <select class="form-control" formControlName="suffix" name="Suffix">
+                <option></option>
+                <option>Jr.</option>
+                <option>II</option>
+                <option>III.</option>
+                <option>IV</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group  col-sm-4 ">
+              <label class="form-label">Nickname:</label>
+              <input class="form-control" type="text" tabindex="20" formControlName="nickname">
+            </div>
+
+            <div class="form-group col-sm-6 ">
+              <label class="form-label">Designation/Certification:(s):</label><BR>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+
+
+  <ngb-tabset class="nav-tabs-top mb-4 rs-max-panel-width contact-tabset">
+
+    <ngb-tab title="Work Information">
+      <ng-template ngbTabContent>
+        <div class="card-body">
+
+          <div class="row">
+            <div class="col-sm-12 ">
+
+
+              <div class="row">
+
+
+                <div class="form-group col-sm-5 ">
+                  <label class="form-label">Organization: </label>
+                  <input class="form-control" formControlName="organization_id" type="text">
+
+
+                </div>
+                <div class="form-group col-sm-1 add-organization-button ">
+                  <button type="button" class="btn btn-success "><i
+                    class="fa fa-plus"></i> Add
+                  </button>
+
+                </div>
+
+                <div class="form-group col-sm-6 ">
+                  <label class="form-label">Role(s):</label><BR>
+
+                </div>
+
+
+              </div>
+
+              <div class="row">
+
+
+                <div class="form-group col-sm-6 ">
+                  <label class="form-label">Title: </label>
+                  <input class="form-control" type="text" formControlName="title">
+                </div>
+
+
+              </div>
+
+              <div class="row">
+
+
+                <div class="form-group col-sm-6 ">
+                  <label class="form-label">Work Address: </label>
+                  <input class="form-control" type="text">
+                </div>
+
+                <div class="form-group col-sm-6 ">
+                  <label class="form-label">Work Phone Number:</label><BR>
+                  <input class="form-control" formControlName="work_phone_number" type="text">
+                </div>
+
+
+              </div>
+
+
+            </div>
+
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Personal Contact Info">
+      <ng-template ngbTabContent>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12 ">
+
+
+              <div class="row">
+
+
+                <div class="form-group col-sm-6 ">
+                  <label class="form-label">Home Address: </label>
+                  <input class="form-control" formControlName="home_address" type="text">
+
+
+                </div>
+
+
+              </div>
+
+              <div class="row">
+
+
+                <div class="form-group col-sm-6 ">
+                  <label class="form-label">Home Phone: </label>
+                  <input class="form-control" formControlName="home_phone_number" type="text">
+
+
+                </div>
+
+
+              </div>
+
+              <div class="row">
+
+
+                <div class="form-group col-sm-6 ">
+                  <label class="form-label">Mobile Phone: </label>
+                  <input class="form-control" formControlName="mobile_phone_number" type="text">
+
+
+                </div>
+                <div class="form-group col-sm-3 ">
+                  <label class="form-label">Preferred Contact Method: </label>
+                  <!--<div class="radio">-->
+                  <!--<label class="form-label"><input type="radio" name="optradio">Mobile</label>-->
+                  <!--</div>-->
+                  <!--<div class="radio">-->
+                  <!--<label class="form-label"><input type="radio" name="optradio">Home</label>-->
+                  <!--</div>-->
+                  <!--<div class="radio disabled">-->
+                  <!--<label class="form-label"><input type="radio" name="optradio">Work</label>-->
+                  <!--</div>-->
+                  <!--<div class="radio disabled">-->
+                  <!--<label class="form-label"><input type="radio" name="optradio">Alternate</label>-->
+                  <!--</div>-->
+
+                  <select class="form-control" formControlName="preferred_phone_number">
+                    <option value="mobile">Mobile</option>
+                    <option value="home">Home</option>
+                    <option value="work">Work</option>
+                    <option value="alternate">Alternate</option>
+                  </select>
+
+
+                </div>
+                <div class="form-group col-sm-3 ">
+                  <label class="form-label">Preferred Address: </label>
+
+                  <!--<div class="radio">-->
+                  <!--<label class="form-label"><input type="radio" name="optradio">Home</label>-->
+                  <!--</div>-->
+                  <!--<div class="radio disabled">-->
+                  <!--<label class="form-label"><input type="radio" name="optradio">Work</label>-->
+                  <!--</div>-->
+                  <!--<div class="radio">-->
+                  <!--<label class="form-label"><input type="radio" name="optradio">Alternate</label>-->
+                  <!--</div>-->
+
+                  <select class="form-control" formControlName="preferred_address">
+
+                    <option value="home">Home</option>
+                    <option value="work">Work</option>
+                    <option value="alternate">Alternate</option>
+                  </select>
+
+                </div>
+
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Alternate Info">
+      <ng-template ngbTabContent>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12 ">
+
+
+              <div class="form-group col-sm-6 ">
+                <label class="form-label">Alternate Address: </label>
+                <input class="form-control" formControlName="alt_address" type="text">
+              </div>
+
+
+              <div class="form-group col-sm-6 ">
+                <label class="form-label">Alternate Phone: </label>
+                <input class="form-control" formControlName="alt_phone_number" type="text">
+              </div>
+
+
+            </div>
+
+          </div>
+
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+
+
+  <div class="row rs-max-panel-width  ">
+    <div class="col-md-12  ">
+
+      <div class="form-group " style="text-align: center">
+        <BR>
+        <button [ladda]="isSaving" (click)="saveChanges()" data-style="expand-right" class="btn btn-round btn-primary"
+                type="submit">Save Changes
+        </button>
+
+        <button class="btn  btn-round btn-outline-secondary m-lg-3"  type="cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,94 @@
+.duplicate-checking-no-duplicates {
+  color: green;
+
+}
+
+.duplicate-checking-duplicates-detected {
+  color: red;
+
+
+
+}
+
+
+.duplicate-checking-duplicates-detected a {
+
+
+  text-decoration: underline;
+
+}
+
+
+.duplicate-checking {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.user-avatar {
+  text-align: center;
+}
+
+.user-avatar i.fa-user-circle {
+  font-size: 100px;
+}
+
+.duplicate-checking-waiting {
+  color: #6abbff;
+}
+
+.duplicate-results-box {
+  height: 210px
+}
+
+.social-buttons {
+  height: 25px;
+  margin-bottom: 20px;
+
+}
+
+.side-panel {
+  padding-left: 50px
+}
+
+.social-lookup {
+  text-align: right;
+  padding-top: 46px;
+
+}
+
+
+
+.social-lookup-icon {
+  padding-right: 30px;
+  line-height: 1;
+}
+
+.btn-take-photo {
+
+  margin-top: 17px;
+  text-align: center;
+
+}
+
+.add-organization-button {
+    /* vertical-align: bottom; */
+    padding-top: 22px;
+}
+
+.social-networking-box {
+  height: 234px
+}
+
+.profile-tab {
+
+  height: 300px
+}
+
+.contact-tabset .card-body {
+  height: 300px
+}
+
+.potential-duplicates {
+  padding-top: 30px;
+  text-align: right;
+}

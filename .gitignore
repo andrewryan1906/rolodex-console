@@ -3,6 +3,8 @@
 .idea
 .idea/*
 
+dist/*
+
 # Don't keep track of the deployment artifacts
 build/swagger.yaml
 build/serverless-output.yaml

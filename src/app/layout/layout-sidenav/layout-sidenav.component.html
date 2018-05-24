@@ -3,8 +3,19 @@
   <!-- Inner -->
   <div class="sidenav-inner" [ngClass]="{ 'py-1': orientation !== 'horizontal' }">
 
-    <sidenav-router-link icon="ion ion-ios-contact" route="/" [active]="isActive('/')">Home</sidenav-router-link>
-    <sidenav-router-link icon="ion ion-md-desktop" route="/page-2" [active]="isActive('/page-2')">Page 2</sidenav-router-link>
 
+
+    <sidenav-router-link icon="ion ion-md-quote" route="/typography" [active]="isActive('/')">Rolodex Overview</sidenav-router-link>
+
+    <!-- Contacts -->
+    <sidenav-menu icon="ion ion-md-cube" text="Contacts" [active]="isMenuActive('/contacts')" [open]="isMenuActive('/contacts')">
+      <sidenav-router-link route="/contacts/create" [active]="isActive('/contacts/create')">Add a Contact</sidenav-router-link>
+      <sidenav-router-link route="/contacts/addresses" [active]="isActive('/contacts/addresses')">Update Contact Addresses</sidenav-router-link>
+    </sidenav-menu>
+
+    <sidenav-header class="small font-weight-semibold">ADMINISTRATION</sidenav-header>
+
+    <sidenav-router-link icon="ion ion-md-quote" route="/typography" [active]="isActive('/admin/contacts')">Contacts</sidenav-router-link>
+    <sidenav-router-link icon="ion ion-md-quote" route="/typography" [active]="isActive('/admin/organizations')">Organizations</sidenav-router-link>
   </div>
 </sidenav>

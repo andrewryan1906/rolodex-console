@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AppService} from '../../app.service';
 import {LayoutService} from '../../layout/layout.service';
 import {Observable} from 'rxjs';
@@ -6,12 +6,10 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
-
-import {AlgoliaSecureApiKey} from '@rhythmsoftware/system-angular-sdk/model/algoliaSecureApiKey';
-import {AlgoliaService} from '@rhythmsoftware/system-angular-sdk/api/algolia.service';
 import * as algoliasearch from 'algoliasearch';
 import {NgbTypeaheadSelectItemEvent} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
+import {AlgoliaKeyManagementService} from '../../services/algolia/algolia-key-management.service';
 
 
 @Component({
@@ -21,37 +19,20 @@ import {Router} from '@angular/router';
   styleUrls: ['./layout-navbar.component.scss'],
 
 })
-export class LayoutNavbarComponent {
+export class LayoutNavbarComponent implements OnInit {
   isExpanded = false;
   isRTL: boolean;
   templateModel: any;
-  algoliaKey: AlgoliaSecureApiKey;
+  isSearchInitialized = false;
+
   alogliaClient: algoliasearch.Client;
   algoliaIndex: algoliasearch.Index;
 
   @Input() sidenavToggle: boolean = true;
 
-  constructor(private appService: AppService, private layoutService: LayoutService, private _algoliaService: AlgoliaService,
+  constructor(private appService: AppService, private layoutService: LayoutService, private _algoliaKeyService: AlgoliaKeyManagementService,
               private _router: Router) {
     this.isRTL = appService.isRTL;
-
-    const keyAsString = localStorage.getItem('algoliaKey');
-
-    if (!keyAsString) {
-      _algoliaService.getSearchApiKey('tests', 'rolodex-contacts')
-        .subscribe(
-          (key) => {
-            this.algoliaKey = key;
-            localStorage.setItem('algoliaKey', JSON.stringify(key));
-          }
-        );
-    } else {
-      this.algoliaKey = JSON.parse(keyAsString);
-    }
-
-    this.alogliaClient = algoliasearch(this.algoliaKey.application_id, this.algoliaKey.api_key);
-    this.algoliaIndex = this.alogliaClient.initIndex(this.algoliaKey.index_name);
-
 
   }
 
@@ -78,4 +59,24 @@ export class LayoutNavbarComponent {
       .switchMap(term => this.algoliaIndex.search({query: term}).then((response) => response.hits));
 
   formatter = (x: { name: string }) => x.name;
+
+  ngOnInit(): void {
+
+
+    // let's get the secure key from our service
+    this._algoliaKeyService.GetSecureApiKey('tests', 'rolodex-contacts')
+      .subscribe(
+        (key) => {
+
+          // populate the index
+          this.alogliaClient = algoliasearch(key.application_id, key.api_key);
+          this.algoliaIndex = this.alogliaClient.initIndex(key.index_name);
+
+          // enable the search
+          this.isSearchInitialized = true;
+        }
+      );
+
+
+  }
 }

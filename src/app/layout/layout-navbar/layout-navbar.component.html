@@ -28,9 +28,10 @@
         <i class="ion ion-ios-search navbar-icon align-middle"></i>
         <span class="navbar-search-input pl-2" style="width: 100%">
 
-           <input id="typeahead-template" type="text" class="form-control navbar-text mx-2"
+           <input #quickSearch id="typeahead-template" type="text" class="form-control navbar-text mx-2"
                   [ngbTypeahead]="searchWithTemplate" [resultTemplate]="searchResultsTemplate"  (selectItem)="searchResultSelected($event)"
-                  [inputFormatter]="formatter" [placement]="'bottom-left'" placeholder="Search the Rolodex..."
+                  [inputFormatter]="formatter" [placement]="'bottom-left'" [placeholder]="isSearchInitialized ? 'Search the Rolodex...' : 'Please wait... initializing quick search...'"
+                  [disabled]="!isSearchInitialized"
                   style="width:100%">
               <ng-template #searchResultsTemplate let-r="result" let-t="term" class="masterResultsBox">
                 <div style="width:900px">

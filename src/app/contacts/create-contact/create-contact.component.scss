@@ -32,36 +32,11 @@
   font-size: 100px;
 }
 
-.duplicate-checking-waiting {
-  color: #6abbff;
-}
-
-.duplicate-results-box {
-  height: 210px
-}
-
-.social-buttons {
-  height: 25px;
-  margin-bottom: 20px;
-
-}
 
 .side-panel {
   padding-left: 50px
 }
 
-.social-lookup {
-  text-align: right;
-  padding-top: 46px;
-
-}
-
-
-
-.social-lookup-icon {
-  padding-right: 30px;
-  line-height: 1;
-}
 
 .btn-take-photo {
 
@@ -75,20 +50,14 @@
     padding-top: 22px;
 }
 
-.social-networking-box {
-  height: 234px
+.panel-toggler {
+  transition: .3s transform ease-in-out;
+  cursor: pointer;
+}
+.panel-toggler .collapsed  {
+  transform: rotate(90deg);
 }
 
-.profile-tab {
-
-  height: 300px
-}
-
-.contact-tabset .card-body {
-  height: 300px
-}
-
-.potential-duplicates {
-  padding-top: 30px;
-  text-align: right;
+.fa-plus {
+  color: green;
 }

@@ -25,6 +25,10 @@ export class CreateContactComponent implements OnInit {
   isSaving: boolean;    // supports the Ladda button
   // designations: Array<Select2OptionData> = [];
 
+  // the name and email panels
+  showAdditionalNameOptions = false;
+  showAdditionalEmails = false;
+
   ngOnInit() {
 
     this.initFormGroup();
@@ -36,25 +40,30 @@ export class CreateContactComponent implements OnInit {
   initFormGroup(): void {
 
     this.contactForm = this.fb.group({
-      prefix: ['Dr.'],
+      salutation: ['Dr.'],
+      name: ['Oscar Wilde'],
       first_name: ['Jason'],
       middle_name: ['middle'],
       last_name: ['Bailey', Validators.minLength(2)],
       suffix: ['Jr.'],
       nickname: 'nickname',
       organization_id: ['org id'],
+      job_title: ['Chief Accountant'],
       work_phone_number: ['workphone'],
       title: ['title'],
       contact_role_ids: [['Employee', 'Owner']],
       home_phone_number: ['home'],
-      // certifications: [['MBA', 'JD']],
+      certifications: [['MBA', 'JD']],
       alt_phone_number: ['altphn'],
       mobile_phone_number: ['mobile'],
       preferred_phone_number: [''],
       preferred_address: [''],
       gender: ['female'],
       date_of_birth: [32323423],
-      email_address: [{value: 'jbailey@msn.com', disabled: false}, Validators.minLength(2)]
+      email_address: '',
+      email_address2: '',
+      email_address3: '',
+      notes: ''
     });
   }
 

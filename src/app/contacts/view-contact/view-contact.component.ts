@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ContactsService} from '@rhythmsoftware/rolodex-angular-sdk/api/contacts.service';
 import {Contact} from '@rhythmsoftware/rolodex-angular-sdk/model/contact';
+import 'rxjs/add/operator/mergeMap';
 
 @Component({
   selector: 'app-view-contact',
@@ -12,13 +13,16 @@ export class ViewContactComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private contactsService: ContactsService) {
 
+
   }
 
   contact: Contact;
 
   ngOnInit() {
 
-    this.contactsService.getContact('tests', this.route.snapshot.params['id'])
+    this.route.params
+      .mergeMap(params =>
+        this.contactsService.getContact('tests', params['id']))
       .subscribe(contact => this.contact = contact);
 
   }

@@ -1,334 +1,258 @@
 <h4 class="font-weight-bold py-3 mb-4">
   <span class="text-muted font-weight-light">Rolodex /</span> Add a Contact
 </h4>
+<div class="alert alert-warning alert-dismissible fade show rs-max-panel-width" role="alert">
+  <strong>Warning:</strong> The ability to create contacts exists for testing and diagnostic purposes. Generally, you
+  should be creating contact
+  records in the Rhythm application
+  to which the contact is applicable.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form [formGroup]="contactForm" (ngSubmit)="saveChanges()">
+  <div class="card mb-4 rs-max-panel-width">
 
-
-  <div class="alert alert-warning alert-dismissible fade show rs-max-panel-width" role="alert">
-    <strong>Warning:</strong> The ability to create contacts exists for testing and diagnostic purposes. Generally, you
-    should be creating contact
-    records in the Rhythm application
-    to which the contact is applicable.
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
   </div>
-
-
-<form [formGroup]="contactForm" (ngSubmit)="save()">
-
-  <ngb-tabset class="nav-tabs-top  profile-tab rs-max-panel-width profile-tabset">
-
-    <ngb-tab title="Basic Profile Info" class="profile-tab">
-      <ng-template ngbTabContent>
-        <div class="card-body">
-
-
-          <div class="col-sm-12 ">
-
-            <div class="row">
-
-              <div class="form-group col-sm-2 user-avatar">
-                <i class="fas fa-user-circle"></i>
-                <div>
-                  <button type="button" class="btn btn-default btn-take-photo"><i
-                    class="fas fa-camera-retro"> </i>
-
-                    Photo
-                  </button>
-                </div>
-              </div>
-
-              <div class="col-sm-10">
-                <div class="row">
-
-                  <div class="form-group col-sm-6 ">
-                    <label class="form-label">First Name:</label>
-                    <input class="form-control" type="text" tabindex="10" autofocus
-                           formControlName="first_name">
-
-                  </div>
-
-                  <div class="form-group  col-sm-6">
-                    <label class="form-label">Last Name:</label>
-                    <input class="form-control" type="text" tabindex="20" formControlName="last_name">
-
-                  </div>
-
-
-                  <div class="form-group col-sm-6 ">
-                    <label class="form-label">E-Mail:</label>
-                    <input class="form-control" type="text" tabindex="30" formControlName="email_address">
-                  </div>
-
-                  <div class="col-sm-6 align-bottom potential-duplicates d-none">
-
-                      <span class="duplicate-checking-no-duplicates" style="display: block">
-              No duplicates detected. <i class="fas fa-check"></i></span>
-                    <span class="duplicate-checking-duplicates-detected" style="display: block">
-              <i class="ion ion-ios-warning"></i> 5 potential duplicate records found. <a href="#">(view)</a></span>
-
-                  </div>
-                  <!--<div class="form-group col-sm-6 social-lookup">-->
-
-
-                  <!--<button type="button" class="btn btn-success "><i-->
-                  <!--class="fas fa-linkedin social-lookup-icon"></i> Social Lookup-->
-                  <!--</button>-->
-
-
-                  <!--</div>-->
-
-                </div>
-              </div>
-            </div>
-
-
-          </div>
-        </div>
-      </ng-template>
-    </ngb-tab>
-    <ngb-tab title="Additional Profile Info">
-      <ng-template ngbTabContent>
-        <div class="card-body">
-          <div class="row ">
-
-            <div class="form-group col-sm-3">
-
-              <label class="form-label">Prefix:</label>
-
-              <select class="form-control" formControlName="prefix" name="Prefix">
-                <option></option>
-                <option>Mr.</option>
-                <option>Mrs.</option>
-                <option>Ms.</option>
-                <option>Dr.</option>
-              </select>
-
-            </div>
-            <div class="form-group  col-sm-3 ">
-              <label class="form-label">Middle:</label>
-              <input class="form-control" type="text" tabindex="20" formControlName="middle_name">
-            </div>
-            <div class="form-group col-sm-3">
-              <label class="form-label">Suffix:</label>
-
-              <select class="form-control" formControlName="suffix" name="Suffix">
-                <option></option>
-                <option>Jr.</option>
-                <option>II</option>
-                <option>III.</option>
-                <option>IV</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group  col-sm-4 ">
-              <label class="form-label">Nickname:</label>
-              <input class="form-control" type="text" tabindex="20" formControlName="nickname">
-            </div>
-
-            <div class="form-group col-sm-6 ">
-              <label class="form-label">Designation/Certification:(s):</label><BR>
-            </div>
-          </div>
-        </div>
-      </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
-
-
   <ngb-tabset class="nav-tabs-top mb-4 rs-max-panel-width contact-tabset">
-
-    <ngb-tab title="Work Information">
+    <ngb-tab title="Basic Profile">
       <ng-template ngbTabContent>
-        <div class="card-body">
-
+        <div class="card-body ">
           <div class="row">
-            <div class="col-sm-12 ">
+            <div class="form-group col-sm-2 user-avatar">
+              <i class="fas fa-user-circle"></i>
+              <div>
+                <button type="button" class="btn btn-default btn-take-photo"><i
+                  class="fas fa-camera-retro"> </i>
+                  Photo
+                </button>
+              </div>
+            </div>
+            <div class="col-sm-10">
+              <div class="form-group row">
+                <label class="col-form-label col-sm-2 text-sm-right">Mode:</label>
+                <div class="col-sm-8 " style="line-height: 35px">
+                  <span style="color:green">New Contact Add</span>
+                  <span class="d-none" style="color:blue">Existing Contact Edit [XS3rud91]</span>
+                </div>
 
+              </div>
+              <div class="form-group row">
+                <label class="col-form-label col-sm-2 text-sm-right">Name:</label>
+                <div class="col-sm-8">
+                  <input class="form-control" formControlName="name"
+                         placeholder="Full name, including salutation and suffix">
+                </div>
 
-              <div class="row">
+                <a (click)="showAdditionalNameOptions = !showAdditionalNameOptions" class="panel-toggler">
+                  <label class="col-form-label col-sm-2 text-sm-left"><i
+                    class="fa fa-chevron-left pull-right "></i></label>
+                </a>
 
+              </div>
+              <div [ngbCollapse]="!showAdditionalNameOptions">
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-2 text-sm-right offset-2">Salutation:</label>
+                  <div class="col-sm-4">
+                    <input class="form-control" formControlName="salutation"
+                           placeholder="Mr., Mrs., Dr.">
+                  </div>
 
-                <div class="form-group col-sm-5 ">
-                  <label class="form-label">Organization: </label>
+                </div>
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-2 text-sm-right offset-2">First Name:</label>
+                  <div class="col-sm-6">
+                    <input class="form-control" formControlName="first_name">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-2 text-sm-right offset-2">Middle Name:</label>
+                  <div class="col-sm-6">
+                    <input class="form-control" formControlName="middle_name">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-2 text-sm-right offset-2">Last Name:</label>
+                  <div class="col-sm-6">
+                    <input class="form-control" formControlName="last_name">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-2 text-sm-right offset-2">Suffix:</label>
+                  <div class="col-sm-4">
+                    <input class="form-control" formControlName="suffix">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-2 text-sm-right offset-2">Nickname:</label>
+                  <div class="col-sm-6">
+                    <input class="form-control" formControlName="nickname">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-form-label col-sm-2 text-sm-right">E-mail Address:</label>
+                <div class="col-sm-8">
+                  <input class="form-control" formControlName="email_address"
+                         placeholder="example@domain.com">
+                </div>
+                <a (click)="showAdditionalEmails = !showAdditionalEmails" class="panel-toggler">
+                  <label class="col-form-label col-sm-2 text-sm-left"><i
+                    class="fa fa-chevron-left pull-right"></i></label>
+                </a>
+              </div>
+              <div [ngbCollapse]="!showAdditionalEmails">
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-2 text-sm-right">E-Mail Address #2:</label>
+                  <div class="col-sm-8">
+                    <input class="form-control" formControlName="email_address2"
+                           placeholder="example@domain.com">
+                  </div>
+
+                </div>
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-2 text-sm-right ">E-Mail Address #3:</label>
+                  <div class="col-sm-8">
+                    <input class="form-control" formControlName="email_address3"
+                           placeholder="example@domain.com">
+                  </div>
+
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-form-label col-sm-2 text-sm-right">Phone Number:</label>
+                <div class="col-sm-5">
+                  <input class="form-control"
+                         placeholder="(xxx) xxx-xxxx">
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-3 ">
+                  <select class="form-control">
+                    <option>Mobile</option>
+                    <option>Home</option>
+                    <option>Work</option>
+                    <option>Alternate</option>
+                  </select>
+                </div>
+                <label class="col-form-label col-sm-1 text-sm-left"><i class="fas fa-plus pull-right"></i></label>
+              </div>
+              <div class="form-group row">
+                <label class="col-form-label col-sm-2 text-sm-right">Address:</label>
+                <div class="col-sm-5">
+                  <input class="form-control"
+                         placeholder="2359 Narnia Lane, City State Zip">
+                </div>
+                <div class="col-sm-1">
+                  <a (click)="showAdditionalEmails = !showAdditionalEmails" class="panel-toggler">
+                    <label class="col-form-label text-sm-left"><i class="fa fa-chevron-left pull-right"></i></label>
+                  </a>
+
+                </div>
+
+                <div class="col-sm-3 ">
+                  <select class="form-control">
+                    <option>Home</option>
+                    <option>Work</option>
+                    <option>Alternate</option>
+                  </select>
+                </div>
+                <label class="col-form-label col-sm-1 text-sm-left"><i class="fas fa-plus pull-right"></i></label>
+              </div>
+              <div class="form-group row">
+                <label class="col-form-label col-sm-2 text-sm-right">Organization:</label>
+                <div class="col-sm-4">
                   <input class="form-control" formControlName="organization_id" type="text">
-
-
                 </div>
-                <div class="form-group col-sm-1 add-organization-button ">
-                  <button type="button" class="btn btn-success "><i
-                    class="fa fa-plus"></i> Add
-                  </button>
+                <label class="col-form-label col-sm-2 text-sm-right">Job Title:</label>
+                <div class="col-sm-4">
 
+                  <input class="form-control" formControlName="job_title" type="text">
                 </div>
-
-                <div class="form-group col-sm-6 ">
-                  <label class="form-label">Role(s):</label><BR>
-
-                </div>
-
 
               </div>
-
-              <div class="row">
-
-
-                <div class="form-group col-sm-6 ">
-                  <label class="form-label">Title: </label>
-                  <input class="form-control" type="text" formControlName="title">
+              <div class="form-group row">
+                <label class="col-form-label col-sm-2 text-sm-right">Role(s):</label>
+                <div class="col-sm-4">
+                  <input class="form-control" formControlName="contact_role_ids" type="text">
                 </div>
+                <label class="col-form-label col-sm-2 text-sm-right">Credentials:</label>
+                <div class="col-sm-4">
 
+                  <input class="form-control" formControlName="certifications" type="text">
+                </div>
 
               </div>
-
-              <div class="row">
-
-
-                <div class="form-group col-sm-6 ">
-                  <label class="form-label">Work Address: </label>
-                  <input class="form-control" type="text">
-                </div>
-
-                <div class="form-group col-sm-6 ">
-                  <label class="form-label">Work Phone Number:</label><BR>
-                  <input class="form-control" formControlName="work_phone_number" type="text">
-                </div>
-
-
-              </div>
-
-
             </div>
-
           </div>
         </div>
       </ng-template>
     </ngb-tab>
-    <ngb-tab title="Personal Contact Info">
+    <ngb-tab title="Additional Profile Information">
       <ng-template ngbTabContent>
-        <div class="card-body">
+        <div class="card-body ">
+
           <div class="row">
-            <div class="col-sm-12 ">
+            <div class="form-group col-sm-4">
+              <label class="form-label ">Gender:</label>
 
-
-              <div class="row">
-
-
-                <div class="form-group col-sm-6 ">
-                  <label class="form-label">Home Address: </label>
-                  <input class="form-control" formControlName="home_address" type="text">
-
-
-                </div>
-
-
-              </div>
-
-              <div class="row">
-
-
-                <div class="form-group col-sm-6 ">
-                  <label class="form-label">Home Phone: </label>
-                  <input class="form-control" formControlName="home_phone_number" type="text">
-
-
-                </div>
-
-
-              </div>
-
-              <div class="row">
-
-
-                <div class="form-group col-sm-6 ">
-                  <label class="form-label">Mobile Phone: </label>
-                  <input class="form-control" formControlName="mobile_phone_number" type="text">
-
-
-                </div>
-                <div class="form-group col-sm-3 ">
-                  <label class="form-label">Preferred Contact Method: </label>
-                  <!--<div class="radio">-->
-                  <!--<label class="form-label"><input type="radio" name="optradio">Mobile</label>-->
-                  <!--</div>-->
-                  <!--<div class="radio">-->
-                  <!--<label class="form-label"><input type="radio" name="optradio">Home</label>-->
-                  <!--</div>-->
-                  <!--<div class="radio disabled">-->
-                  <!--<label class="form-label"><input type="radio" name="optradio">Work</label>-->
-                  <!--</div>-->
-                  <!--<div class="radio disabled">-->
-                  <!--<label class="form-label"><input type="radio" name="optradio">Alternate</label>-->
-                  <!--</div>-->
-
-                  <select class="form-control" formControlName="preferred_phone_number">
-                    <option value="mobile">Mobile</option>
-                    <option value="home">Home</option>
-                    <option value="work">Work</option>
-                    <option value="alternate">Alternate</option>
-                  </select>
-
-
-                </div>
-                <div class="form-group col-sm-3 ">
-                  <label class="form-label">Preferred Address: </label>
-
-                  <!--<div class="radio">-->
-                  <!--<label class="form-label"><input type="radio" name="optradio">Home</label>-->
-                  <!--</div>-->
-                  <!--<div class="radio disabled">-->
-                  <!--<label class="form-label"><input type="radio" name="optradio">Work</label>-->
-                  <!--</div>-->
-                  <!--<div class="radio">-->
-                  <!--<label class="form-label"><input type="radio" name="optradio">Alternate</label>-->
-                  <!--</div>-->
-
-                  <select class="form-control" formControlName="preferred_address">
-
-                    <option value="home">Home</option>
-                    <option value="work">Work</option>
-                    <option value="alternate">Alternate</option>
-                  </select>
-
-                </div>
-
-              </div>
-
-
+              <select class="form-control">
+                <option>Male</option>
+                <option>Female</option>
+              </select>
             </div>
+            <div class="form-group col-sm-4">
+              <label class="form-label ">Date of Birth:</label>
 
+              <input class="form-control" type="text" placeholder="mm/dd/yyyy">
+            </div>
+          </div>
+
+          <div class="form-group col-sm-10">
+            <label class="form-label ">Notes:</label>
+
+            <textarea class="form-control" placeholder="Any pertinent notes, info, etc."
+                      rows="5"
+                      formControlName="notes"></textarea>
+          </div>
+
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Social Networks">
+      <ng-template ngbTabContent>
+
+        <div class="card-body ">
+
+          <div class="row">
+            <div class="form-group col-sm-4">
+              <label class="form-label ">Facebook:</label>
+
+              <input class="form-control" type="text" >
+            </div>
+            <div class="form-group col-sm-4">
+              <label class="form-label ">Instagram:</label>
+
+              <input class="form-control" type="text" >
+            </div>
+            <div class="form-group col-sm-4">
+              <label class="form-label ">Twitter Handle:</label>
+
+              <input class="form-control" type="text" >
+            </div>
+            <div class="form-group col-sm-4">
+              <label class="form-label ">LinkedIn:</label>
+
+              <input class="form-control" type="text" >
+            </div>
           </div>
 
 
         </div>
       </ng-template>
     </ngb-tab>
-    <ngb-tab title="Alternate Info">
+    <ngb-tab title="Custom Demographics">
       <ng-template ngbTabContent>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-sm-12 ">
 
-
-              <div class="form-group col-sm-6 ">
-                <label class="form-label">Alternate Address: </label>
-                <input class="form-control" formControlName="alt_address" type="text">
-              </div>
-
-
-              <div class="form-group col-sm-6 ">
-                <label class="form-label">Alternate Phone: </label>
-                <input class="form-control" formControlName="alt_phone_number" type="text">
-              </div>
-
-
-            </div>
-
-          </div>
-
-        </div>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
@@ -336,14 +260,12 @@
 
   <div class="row rs-max-panel-width  ">
     <div class="col-md-12  ">
-
       <div class="form-group " style="text-align: center">
         <BR>
         <button [ladda]="isSaving" (click)="saveChanges()" data-style="expand-right" class="btn btn-round btn-primary"
                 type="submit">Save Changes
         </button>
-
-        <button class="btn  btn-round btn-outline-secondary m-lg-3"  type="cancel">Cancel</button>
+        <button class="btn  btn-round btn-outline-secondary m-lg-3" type="cancel">Cancel</button>
       </div>
     </div>
   </div>

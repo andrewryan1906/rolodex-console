@@ -109,6 +109,10 @@ export class CreateContactComponent implements OnInit {
 
   }
 
+  isNameInvalid() {
+    return this.contactForm.controls['name'].errors && this.contactForm.controls['name'].touched;
+  }
+
 
   // saves the contact record via the REST API
   saveChanges(): void {

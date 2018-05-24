@@ -206,13 +206,14 @@
               <input class="form-control" type="text" placeholder="mm/dd/yyyy">
             </div>
           </div>
+          <div class="row">
+            <div class="form-group col-sm-10">
+              <label class="form-label ">Notes:</label>
 
-          <div class="form-group col-sm-10">
-            <label class="form-label ">Notes:</label>
-
-            <textarea class="form-control" placeholder="Any pertinent notes, info, etc."
-                      rows="5"
-                      formControlName="notes"></textarea>
+              <textarea class="form-control" placeholder="Any pertinent notes, info, etc."
+                        rows="5"
+                        formControlName="notes"></textarea>
+            </div>
           </div>
 
         </div>
@@ -223,36 +224,51 @@
 
         <div class="card-body ">
 
-          <div class="row">
-            <div class="form-group col-sm-4">
-              <label class="form-label ">Facebook:</label>
-
-              <input class="form-control" type="text" >
+          <div class="form-group row">
+            <label class="col-form-label col-sm-2 text-sm-right"><i class="fab fa-facebook"></i> Facebook:</label>
+            <div class="col-sm-8 " style="line-height: 35px">
+              <input class="form-control" type="text">
             </div>
-            <div class="form-group col-sm-4">
-              <label class="form-label ">Instagram:</label>
 
-              <input class="form-control" type="text" >
-            </div>
-            <div class="form-group col-sm-4">
-              <label class="form-label ">Twitter Handle:</label>
-
-              <input class="form-control" type="text" >
-            </div>
-            <div class="form-group col-sm-4">
-              <label class="form-label ">LinkedIn:</label>
-
-              <input class="form-control" type="text" >
-            </div>
           </div>
 
 
+          <div class="form-group row">
+            <label class="col-form-label col-sm-2 text-sm-right"> <i class="fab fa-instagram"></i> Instagram:</label>
+            <div class="col-sm-8 " style="line-height: 35px">
+              <input class="form-control" type="text">
+            </div>
+
+          </div>
+
+          <div class="form-group row">
+            <label class="col-form-label col-sm-2 text-sm-right"> <i class="fab fa-twitter-square"></i> Twitter Handle:</label>
+            <div class="col-sm-8 " style="line-height: 35px">
+              <input class="form-control" type="text">
+            </div>
+
+          </div>
+
+          <div class="form-group row">
+            <label class="col-form-label col-sm-2 text-sm-right"> <i class="fab fa-linkedin-in"></i> LinkedIn:</label>
+            <div class="col-sm-8 " style="line-height: 35px">
+              <input class="form-control" type="text">
+            </div>
+
+          </div>
         </div>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="Custom Demographics">
       <ng-template ngbTabContent>
+        <div class="card-body ">
 
+          <div class="row" class="p-lg-5">
+            No custom demographics have been configured.
+          </div>
+
+
+        </div>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>

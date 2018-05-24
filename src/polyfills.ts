@@ -71,3 +71,9 @@ if (typeof window !== 'undefined' && typeof SVGElement !== 'undefined' && typeof
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+// Rhythm Override by Andrew
+// https://github.com/algolia/algoliasearch-client-javascript/issues/691
+(window as any).process = {
+  env: { DEBUG: undefined },
+};

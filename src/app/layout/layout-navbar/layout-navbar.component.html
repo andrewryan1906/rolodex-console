@@ -22,18 +22,41 @@
 
     <div class="col-md-6"></div>
 
-    <div class="navbar-nav align-items-lg-center col-md-4" >
+    <div class="navbar-nav align-items-lg-center col-md-4">
       <!-- Search -->
       <label class="nav-item navbar-text navbar-search-box p-0 active" style="width: 100%">
         <i class="ion ion-ios-search navbar-icon align-middle"></i>
         <span class="navbar-search-input pl-2" style="width: 100%">
-          <input type="text" class="form-control navbar-text mx-2" placeholder="Search..." style="width:100%">
+
+           <input id="typeahead-template" type="text" class="form-control navbar-text mx-2"
+                  [ngbTypeahead]="searchWithTemplate" [resultTemplate]="searchResultsTemplate"  (selectItem)="searchResultSelected($event)"
+                  [inputFormatter]="formatter" [placement]="'bottom-left'" placeholder="Search the Rolodex..."
+                  style="width:100%">
+              <ng-template #searchResultsTemplate let-r="result" let-t="term" class="masterResultsBox">
+                <div style="width:900px">
+                <div class="row">
+                    <div class="col-md-2" style="font-size: 30px">   <i class="fas fa-user-circle"></i></div>
+                    <div class="col-md-4">
+                        <strong>{{r.first_name}} {{r.last_name}}</strong>
+
+                  </div>
+                  <div class="col-md-3">
+                        {{r.work_address ? (r.work_address.city + ', ' + r.work_address.state ) : ( r.home_address ? (r.home_address.city + ', ' + r.home_address.state ) : ''   ) }}
+                  </div>
+                  <div class="col-md-2">
+                    {{r.email_address}}
+                  </div>
+
+                </div>
+                </div>
+          </ng-template>
         </span>
       </label>
     </div>
 
-    <div class="navbar-nav align-items-center  ml-auto" style="text-align: right;">
-      <div ngbDropdown [placement]="isRTL ? 'bottom-left' : 'bottom-right'" class="demo-navbar-notifications nav-item mr-lg-3">
+    <div class=" navbar-nav align-items-center ml-auto" style="text-align: right;">
+      <div ngbDropdown [placement]="isRTL ? 'bottom-left' : 'bottom-right'"
+           class="demo-navbar-notifications nav-item mr-lg-3">
         <a ngbDropdownToggle class="nav-link hide-arrow" href="javascript:void(0)">
           <i class="ion ion-md-notifications-outline navbar-icon align-middle"></i>
 
@@ -94,7 +117,8 @@
         </div>
       </div>
 
-      <div ngbDropdown [placement]="isRTL ? 'bottom-left' : 'bottom-right'" class="demo-navbar-messages nav-item mr-lg-3">
+      <div ngbDropdown [placement]="isRTL ? 'bottom-left' : 'bottom-right'"
+           class="demo-navbar-messages nav-item mr-lg-3">
         <a ngbDropdownToggle class="nav-link hide-arrow" href="javascript:void(0)">
           <i class="ion ion-ios-mail navbar-icon align-middle"></i>
           <span class="badge badge-primary badge-dot indicator"></span>
@@ -137,7 +161,9 @@
             <a href="javascript:void(0)" class="list-group-item list-group-item-action media d-flex align-items-center">
               <img src="assets/img/avatars/11-small.png" class="d-block ui-w-40 rounded-circle" alt>
               <div class="media-body ml-3">
-                <div class="text-dark line-height-condenced">Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.</div>
+                <div class="text-dark line-height-condenced">Lorem ipsum dolor sit amet, vis erat denique in, dicunt
+                  prodesset te vix.
+                </div>
                 <div class="text-light small mt-1">
                   Belle Ross &nbsp;·&nbsp; 5h ago
                 </div>
@@ -160,11 +186,15 @@
           </span>
         </a>
         <div ngbDropdownMenu [class.dropdown-menu-right]="!isRTL">
-          <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-person text-lightest"></i> &nbsp; My profile</a>
-          <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-mail text-lightest"></i> &nbsp; Messages</a>
-          <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-md-settings text-lightest"></i> &nbsp; Account settings</a>
+          <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-person text-lightest"></i> &nbsp; My
+            profile</a>
+          <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-mail text-lightest"></i> &nbsp;
+            Messages</a>
+          <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-md-settings text-lightest"></i> &nbsp;
+            Account settings</a>
           <div class="dropdown-divider"></div>
-          <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-log-out text-danger"></i> &nbsp; Log Out</a>
+          <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-log-out text-danger"></i> &nbsp; Log
+            Out</a>
         </div>
       </div>
     </div>

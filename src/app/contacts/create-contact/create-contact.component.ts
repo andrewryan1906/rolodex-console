@@ -62,9 +62,9 @@ export class CreateContactComponent implements OnInit {
       preferred_address: '',
       gender: '',
       date_of_birth: '',
-      email_address: '',
-      email_address2: '',
-      email_address3: '',
+      email_address: ['', Validators.email],
+      email_address2: ['', Validators.email],
+      email_address3: ['', Validators.email],
       notes: ''
     });
 
@@ -109,8 +109,8 @@ export class CreateContactComponent implements OnInit {
 
   }
 
-  isNameInvalid() {
-    return this.contactForm.controls['name'].errors && this.contactForm.controls['name'].touched;
+  shouldShowFormErrorFor(field: string ) {
+    return this.contactForm.controls[field].errors && this.contactForm.controls[field].touched;
   }
 
 

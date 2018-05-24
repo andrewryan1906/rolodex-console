@@ -40,9 +40,12 @@
               <div class="form-group row">
                 <label class="col-form-label col-sm-2 text-sm-right ">Name:</label>
                 <div class="col-sm-8">
-                  <input class="form-control" [ngClass]="isNameInvalid() ? 'is-invalid' : ''" formControlName="name" autocomplete="name"
+                  <input class="form-control" [ngClass]="shouldShowFormErrorFor('name') ? 'is-invalid' : ''"
+                         formControlName="name" autocomplete="name"
                          placeholder="Full name including salutation and suffix">
-                       <small class="invalid-feedback" *ngIf="isNameInvalid()" >C'mon... you've got to at least give us a name.</small>
+                  <small class="invalid-feedback" *ngIf="shouldShowFormErrorFor('name')">C'mon... you've got to at
+                    least give us a name.
+                  </small>
                 </div>
 
                 <div class="panel-toggler">
@@ -75,7 +78,7 @@
                 <div class="form-group row">
                   <label class="col-form-label col-sm-2 text-sm-right offset-2">Middle Name:</label>
                   <div class="col-sm-6">
-                    <input class="form-control" formControlName="middle_name" autocomplete="middle-name" >
+                    <input class="form-control" formControlName="middle_name" autocomplete="middle-name">
                   </div>
                 </div>
                 <div class="form-group row">
@@ -100,8 +103,13 @@
               <div class="form-group row">
                 <label class="col-form-label col-sm-2 text-sm-right">E-mail Address:</label>
                 <div class="col-sm-8">
-                  <input class="form-control" formControlName="email_address" autocomplete="email"
+                  <input class="form-control" [ngClass]="shouldShowFormErrorFor('email_address') ? 'is-invalid' : ''"
+                         formControlName="email_address" autocomplete="email" type="email"
                          placeholder="example@domain.com">
+                  <span class="invalid-feedback" *ngIf="shouldShowFormErrorFor('email_address')">Please enter a valid
+                    email address.
+                  </span>
+
                 </div>
                 <div class="panel-toggler">
                   <a (click)="showAdditionalEmails = !showAdditionalEmails">
@@ -114,20 +122,28 @@
                   </a>
                 </div>
               </div>
-              <div [ngbCollapse]="!showAdditionalEmails"  >
+              <div [ngbCollapse]="!showAdditionalEmails">
                 <div class="form-group row">
                   <label class="col-form-label col-sm-2 text-sm-right">E-Mail Address #2:</label>
                   <div class="col-sm-8">
-                    <input class="form-control" formControlName="email_address2" autocomplete="email"
+                    <input class="form-control" [ngClass]="shouldShowFormErrorFor('email_address2') ? 'is-invalid' : ''"
+                           formControlName="email_address2" autocomplete="email" type="email"
                            placeholder="example@domain.com">
+                    <span class="invalid-feedback" *ngIf="shouldShowFormErrorFor('email_address2')">Please enter a valid
+                    email address.
+                  </span>
                   </div>
 
                 </div>
                 <div class="form-group row">
                   <label class="col-form-label col-sm-2 text-sm-right ">E-Mail Address #3:</label>
                   <div class="col-sm-8">
-                    <input class="form-control" formControlName="email_address3" autocomplete="email"
+                    <input class="form-control" [ngClass]="shouldShowFormErrorFor('email_address3') ? 'is-invalid' : ''"
+                           formControlName="email_address3" autocomplete="email" type="email"
                            placeholder="example@domain.com">
+                    <span class="invalid-feedback" *ngIf="shouldShowFormErrorFor('email_address3')">Please enter a valid
+                    email address.
+                  </span>
                   </div>
 
                 </div>
@@ -174,12 +190,12 @@
               <div class="form-group row">
                 <label class="col-form-label col-sm-2 text-sm-right">Organization:</label>
                 <div class="col-sm-4">
-                  <input class="form-control" formControlName="organization_id" type="text" >
+                  <input class="form-control" formControlName="organization_id" type="text">
                 </div>
                 <label class="col-form-label col-sm-2 text-sm-right">Job Title:</label>
                 <div class="col-sm-4">
 
-                  <input class="form-control" formControlName="job_title" type="text"  autocomplete="organization-title">
+                  <input class="form-control" formControlName="job_title" type="text" autocomplete="organization-title">
                 </div>
 
               </div>
@@ -208,7 +224,7 @@
             <div class="form-group col-sm-4">
               <label class="form-label ">Gender:</label>
 
-              <select class="form-control"  autocomplete="sex">
+              <select class="form-control" autocomplete="sex">
                 <option>Male</option>
                 <option>Female</option>
               </select>
@@ -216,7 +232,7 @@
             <div class="form-group col-sm-4">
               <label class="form-label ">Date of Birth:</label>
 
-              <input class="form-control" type="text" placeholder="mm/dd/yyyy"  autocomplete="bday">
+              <input class="form-control" type="text" placeholder="mm/dd/yyyy" autocomplete="bday">
             </div>
           </div>
           <div class="row">

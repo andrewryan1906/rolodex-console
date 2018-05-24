@@ -25,12 +25,17 @@
     padding-top: 22px;
 }
 
-.panel-toggler {
-  transition: .3s transform ease-in-out;
+.panel-toggler{
   cursor: pointer;
+
 }
-.panel-toggler .collapsed  {
-  transform: rotate(90deg);
+.panel-toggler .fa {
+  transition: .3s transform ease-in-out;
+
+
+}
+.panel-toggler .collapsed .fa  {
+  transform: rotate(-90deg);
 }
 
 .fa-plus {

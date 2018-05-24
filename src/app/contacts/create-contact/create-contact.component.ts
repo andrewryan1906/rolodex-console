@@ -5,6 +5,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import clean from 'lodash-clean';
+import * as nameParser from 'parse-full-name';
+
 import {Contact} from '@rhythmsoftware/rolodex-angular-sdk/model/contact';
 
 
@@ -40,30 +42,61 @@ export class CreateContactComponent implements OnInit {
   initFormGroup(): void {
 
     this.contactForm = this.fb.group({
-      salutation: ['Dr.'],
-      name: ['Oscar Wilde'],
-      first_name: ['Jason'],
-      middle_name: ['middle'],
-      last_name: ['Bailey', Validators.minLength(2)],
-      suffix: ['Jr.'],
-      nickname: 'nickname',
-      organization_id: ['org id'],
-      job_title: ['Chief Accountant'],
-      work_phone_number: ['workphone'],
-      title: ['title'],
-      contact_role_ids: [['Employee', 'Owner']],
-      home_phone_number: ['home'],
-      certifications: [['MBA', 'JD']],
-      alt_phone_number: ['altphn'],
-      mobile_phone_number: ['mobile'],
-      preferred_phone_number: [''],
-      preferred_address: [''],
-      gender: ['female'],
-      date_of_birth: [32323423],
+      salutation: '',
+      name: ['', Validators.required],
+      first_name: '',
+      middle_name: '',
+      last_name: '',
+      suffix: '',
+      nickname: '',
+      organization_id: '',
+      job_title: '',
+      work_phone_number: '',
+      title: '',
+      contact_role_ids: '',
+      home_phone_number: '',
+      certifications: '',
+      alt_phone_number: '',
+      mobile_phone_number: '',
+      preferred_phone_number: '',
+      preferred_address: '',
+      gender: '',
+      date_of_birth: '',
       email_address: '',
       email_address2: '',
       email_address3: '',
       notes: ''
+    });
+
+    this.contactForm.get('name').valueChanges.subscribe(name => {
+
+      // we don't want to run this if someone has changed one of the
+      // fields
+
+      if (this.contactForm.get('first_name').dirty ||
+        this.contactForm.get('middle_name').dirty ||
+        this.contactForm.get('last_name').dirty ||
+        this.contactForm.get('salutation').dirty ||
+        this.contactForm.get('nickname').dirty ||
+        this.contactForm.get('suffix').dirty) {
+        console.log('form name elements changed, disabling name parsing');
+        return;
+      }
+      const nameparts = nameParser.parseFullName(name);
+      // console.log(JSON.stringify(nameparts));
+
+      this.contactForm.patchValue({
+        first_name: nameparts.first,
+        middle_name: nameparts.middle,
+        last_name: nameparts.last,
+        salutation: nameparts.title,
+        nickname: nameparts.nick,
+        suffix: nameparts.suffix
+      });
+
+      if (nameparts.error && nameparts.error.length > 0) {
+        console.error('could not parse name: ' + JSON.stringify(nameparts.error));
+      }
     });
   }
 
@@ -75,6 +108,7 @@ export class CreateContactComponent implements OnInit {
     // })));
 
   }
+
 
   // saves the contact record via the REST API
   saveChanges(): void {

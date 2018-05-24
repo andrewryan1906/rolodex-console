@@ -1,12 +1,13 @@
-import { Component, Input } from '@angular/core';
-import { AppService } from '../../app.service';
-import { LayoutService } from '../../layout/layout.service';
+import {Component, Input} from '@angular/core';
+import {AppService} from '../../app.service';
+import {LayoutService} from '../../layout/layout.service';
 
 @Component({
   selector: 'app-layout-navbar',
   templateUrl: './layout-navbar.component.html',
-  styles: [':host { display: block; }'],
-  host: { '[class.layout-navbar]': 'true' }
+
+  styleUrls: ['./layout-navbar.component.scss'],
+
 })
 export class LayoutNavbarComponent {
   isExpanded = false;

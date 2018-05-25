@@ -14,7 +14,8 @@ import {ToastrModule} from 'ngx-toastr';
 import {LaddaModule} from 'angular2-ladda';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { ViewContactComponent } from './contacts/view-contact/view-contact.component';
+import {ViewContactComponent} from './contacts/view-contact/view-contact.component';
+import {GooglePlaceModule} from 'ngx-google-places-autocomplete';
 
 // *******************************************************************************
 // NgBootstrap
@@ -47,7 +48,7 @@ import { ViewContactComponent } from './contacts/view-contact/view-contact.compo
     ToastrModule.forRoot(),
     ReactiveFormsModule,
     BrowserAnimationsModule,
-
+    GooglePlaceModule,
     LaddaModule,
     RolodexApi,
     SystemApi,

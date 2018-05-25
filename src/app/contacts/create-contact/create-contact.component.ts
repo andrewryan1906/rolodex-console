@@ -8,12 +8,14 @@ import clean from 'lodash-clean';
 import * as nameParser from 'parse-full-name';
 import {Contact} from '@rhythmsoftware/rolodex-angular-sdk/model/contact';
 import * as  googlePhoneNumberLib from 'google-libphonenumber';
+import {Address} from 'ngx-google-places-autocomplete/objects/address';
+import {GooglePlacesService} from '../../services/google-places/google-places.service';
 
 
 // This method checks to make sure you don't have two phone numbers with the same type
 function validatePhoneNumbers(c: AbstractControl): { [key: string]: boolean } | null {
 
-  //console.log('validating...' + JSON.stringify( c.value ));
+  // console.log('validating...' + JSON.stringify( c.value ));
 
   const entriesThatHaveBeenProcessed = {};
   for (const phoneAndTypeEntry of c.value) {
@@ -37,7 +39,7 @@ export class CreateContactComponent implements OnInit {
 
 
   constructor(private _contactsService: ContactsService, private _certificationsService: CertificationsService,
-              private fb: FormBuilder,
+              private fb: FormBuilder, private _googlePlacesService: GooglePlacesService,
               private router: Router, private toastr: ToastrService) {
   }
 
@@ -49,6 +51,7 @@ export class CreateContactComponent implements OnInit {
   // the name and email panels
   showAdditionalNameOptions = false;
   showAdditionalEmails = false;
+  showFullAddress = false;
 
   ngOnInit() {
 
@@ -70,9 +73,15 @@ export class CreateContactComponent implements OnInit {
       nickname: '',
       organization_id: '',
       job_title: '',
-      phone_number: '',
-      phone_number_ext: '',
-      work_phone_number: '',
+
+
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      postal_code: '',
+      country: '',
+
       title: '',
       contact_role_ids: '',
       phone_numbers: this.fb.array([this.buildPhoneNumberGroup()], validatePhoneNumbers),
@@ -174,7 +183,7 @@ export class CreateContactComponent implements OnInit {
   }
 
   shouldShowFormErrorFor(field: string) {
-    return this.contactForm.controls[field].errors && this.contactForm.controls[field].touched;
+    return this.contactForm.controls[field].errors && this.contactForm.controls[field].touched && this.contactForm.controls[field].dirty;
   }
 
   shouldShowFormErrorForControl(field: AbstractControl) {
@@ -193,7 +202,7 @@ export class CreateContactComponent implements OnInit {
 
     console.log(JSON.stringify(contactToSave));
 
-    return clean(contactToSave );
+    return clean(contactToSave);
   }
 
   private extractPhoneNumbersFromForm(contactToSave) {
@@ -240,6 +249,25 @@ export class CreateContactComponent implements OnInit {
     }
   }
 
+  handleAddressChange(address: Address) {
+
+    console.log(JSON.stringify(address));
+    let addr = this._googlePlacesService.parseGooglePlacesAddress(address);
+
+    console.log('Placed Addr: ' + JSON.stringify(addr));
+
+    this.contactForm.patchValue({
+      line1: addr.line1,
+      line2: addr.line2,
+      city: addr.city,
+      state: addr.state,
+      postal_code: addr.postal_code,
+      country: addr.country
+
+    });
+
+
+  }
 
 // saves the contact record via the REST API
   saveChanges(): void {

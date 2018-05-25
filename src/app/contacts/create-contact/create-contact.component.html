@@ -155,13 +155,13 @@
                       <option value="work">Work</option>
                       <option value="alternate">Alternate</option>
                     </select>
-                    <span class="invalid-feedback" *ngIf="phone_numbers.errors || true  ">
+                    <span class="invalid-feedback" *ngIf="phone_numbers.errors    ">
                            You've specified the same phone number type multiple times.
                            </span>
                   </div>
                   <!-- We only want to show the plus sign for the first element, and only when there's 3 or less -->
                   <div class="dynamic-row-add col-sm-1"
-                       [ngClass]="i ==0 && phone_numbers.controls.length <= MAX_PHONE_NUMBER_TYPES ? ''  : 'd-none'">
+                       [ngClass]="i ==0 && phone_numbers.controls.length < MAX_PHONE_NUMBER_TYPES ? ''  : 'd-none'">
                     <a (click)="addPhoneNumber()">
                       <i class="fas fa-plus pull-right"></i>
                     </a>
@@ -188,15 +188,23 @@
                       </a>
                     </div>
                     <div class="col-sm-3 ">
-                      <select class="form-control" formControlName="address_type">
+                      <select class="form-control" formControlName="address_type"  [ngClass]="addresses.errors ? 'is-invalid' : ''">
                         <option>Home</option>
                         <option>Work</option>
                         <option>Alternate</option>
                       </select>
+                      <span class="invalid-feedback" *ngIf="addresses.errors   ">
+                           You've specified the same address type multiple times.
+                           </span>
                     </div>
-                    <label class="col-form-label col-sm-1 text-sm-left"><i class="fas fa-plus pull-right"></i></label>
+                    <div class="dynamic-row-add col-sm-1"
+                       [ngClass]="j ==0 && addresses.controls.length < MAX_ADDRESS_TYPES ? ''  : 'd-none'">
+                    <a (click)="addAddress()">
+                      <i class="fas fa-plus pull-right"></i>
+                    </a>
                   </div>
-                  <div [ngbCollapse]="!showFullAddress[j]">
+                  </div>
+                  <div [ngbCollapse]="!showFullAddress[j]" class="offset-1">
                     <div class="form-group row">
                       <label class="col-form-label col-sm-2 text-sm-right ">Line 1:</label>
                       <div class="col-sm-6">

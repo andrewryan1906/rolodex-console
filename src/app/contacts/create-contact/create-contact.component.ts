@@ -75,6 +75,7 @@ export class CreateContactComponent implements OnInit {
       job_title: '',
 
 
+      address: '',
       line1: '',
       line2: '',
       city: '',
@@ -249,6 +250,8 @@ export class CreateContactComponent implements OnInit {
     }
   }
 
+  hasAddressBeenPlaced = false;
+
   handleAddressChange(address: Address) {
 
     console.log(JSON.stringify(address));
@@ -262,9 +265,13 @@ export class CreateContactComponent implements OnInit {
       city: addr.city,
       state: addr.state,
       postal_code: addr.postal_code,
-      country: addr.country
+      country: addr.country,
+      address:  'Please edit the address below'
 
     });
+    this.showFullAddress = true;
+    this.hasAddressBeenPlaced = true;
+    this.contactForm.get('address').disable(  ) ;
 
 
   }

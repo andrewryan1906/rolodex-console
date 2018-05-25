@@ -174,12 +174,12 @@
                        </span>
                   </div>
                   <!-- We only want to show the plus sign for the first element, and only when there's 3 or less -->
-                  <div class="dynamic-row-add col-sm-1" [ngClass]="i ==0 && phone_numbers.controls.length <= 3 ? ''  : 'd-none'">
+                  <div class="dynamic-row-add col-sm-1"
+                       [ngClass]="i ==0 && phone_numbers.controls.length <= 3 ? ''  : 'd-none'">
                     <a (click)="addPhoneNumber()">
                       <i class="fas fa-plus pull-right"></i>
                     </a>
                   </div>
-
 
 
                 </div>
@@ -189,11 +189,12 @@
                 <label class="col-form-label col-sm-2 text-sm-right">Address:</label>
                 <div class="col-sm-5">
                   <input class="form-control" autocomplete="street-address"
-                           ngx-google-places-autocomplete (onAddressChange)="handleAddressChange($event)"
+                        formControlName="address"
+                         ngx-google-places-autocomplete (onAddressChange)="handleAddressChange($event)"
                          placeholder="508 Saint Cloud Road, Bel Air, MD 21014">
                 </div>
                 <div class="panel-toggler col-sm-1">
-                  <a (click)="showFullAddress = !showFullAddress">
+                  <a (click)="showFullAddress = !showFullAddress" [ngClass]="hasAddressBeenPlaced ? 'd-none' : ''">
 
                     <span [ngClass]="showFullAddress ? 'collapsed' : ''">
                     <i
@@ -213,7 +214,6 @@
                 </div>
                 <label class="col-form-label col-sm-1 text-sm-left"><i class="fas fa-plus pull-right"></i></label>
               </div>
-
 
 
               <div [ngbCollapse]="!showFullAddress">
@@ -254,7 +254,7 @@
                   </div>
 
                 </div>
-                     <div class="form-group row">
+                <div class="form-group row">
                   <label class="col-form-label col-sm-2 text-sm-right ">Postal Code:</label>
                   <div class="col-sm-6">
                     <input class="form-control" placeholder="21015" formControlName="country">

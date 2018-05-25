@@ -173,19 +173,22 @@
                 <div [formGroupName]="j">
                   <div class="form-group row">
                     <label class="col-form-label col-sm-2 text-sm-right">Address:</label>
-                    <div class="col-sm-5">
+                    <div class="col-sm-5" [ngClass]="hasAddressBeenPlaced[j] ? 'd-none' : ''">
                       <input class="form-control" autocomplete="street-address"
                              formControlName="address_lookup"
                              ngx-google-places-autocomplete (onAddressChange)="handleAddressChange($event, j)"
                              placeholder="508 Saint Cloud Road, Bel Air, MD 21014">
                     </div>
-                    <div class="panel-toggler col-sm-1">
-                      <a (click)="showFullAddress[j] = !showFullAddress[j]" [ngClass]="hasAddressBeenPlaced[j] ? 'd-none' : ''">
-                           <span [ngClass]="showFullAddress[j] ? 'collapsed' : ''">
-                           <i
-                             class="fa fa-chevron-left pull-right "></i>
-                           </span>
-                      </a>
+                    <div class="panel-toggler col-sm-1" [ngClass]="hasAddressBeenPlaced[j] ? 'd-none' : ''">
+                      <!--<a (click)="showFullAddress[j] = !showFullAddress[j]" [ngClass]="hasAddressBeenPlaced[j] ? 'd-none' : ''">-->
+                           <!--<span [ngClass]="showFullAddress[j] ? 'collapsed' : ''">-->
+                           <!--<i-->
+                             <!--class="fa fa-chevron-left pull-right "></i>-->
+                           <!--</span>-->
+                      <!--</a>-->
+                    </div>
+                    <div class="col-sm-6" [ngClass]="hasAddressBeenPlaced[j] ? '' : 'd-none' " style="padding-top: 8px;">
+                      Edit the address below.
                     </div>
                     <div class="col-sm-3 ">
                       <select class="form-control" formControlName="address_type"  [ngClass]="addresses.errors ? 'is-invalid' : ''">

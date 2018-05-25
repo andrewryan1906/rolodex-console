@@ -35,7 +35,11 @@ function validateAddresses(c: AbstractControl): { [key: string]: boolean } | nul
   // console.log('validating...' + JSON.stringify( c.value ));
 
   const entriesThatHaveBeenProcessed = {};
+
   for (const addressAndTypeEntry of c.value) {
+
+    if ( ! addressAndTypeEntry.line1 || addressAndTypeEntry.line1.trim() === ''  )
+      continue; // don't worry about it
 
     if (entriesThatHaveBeenProcessed[addressAndTypeEntry.address_type])
       return {'duplicate_address_types': true};
@@ -278,7 +282,7 @@ export class CreateContactComponent implements OnInit {
     return this.fb.group({
 
       address_lookup: '',
-      address_type: 'Home',
+      address_type: 'home',
       line1: '',
       line2: '',
       city: '',

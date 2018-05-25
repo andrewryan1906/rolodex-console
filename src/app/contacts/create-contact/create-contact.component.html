@@ -173,7 +173,8 @@
                      You've specified the same phone number type multiple times.
                        </span>
                   </div>
-                  <div class="dynamic-row-add col-sm-1">
+                  <!-- We only want to show the plus sign for the first element, and only when there's 3 or less -->
+                  <div class="dynamic-row-add col-sm-1" [ngClass]="i ==0 && phone_numbers.controls.length <= 3 ? ''  : 'd-none'">
                     <a (click)="addPhoneNumber()">
                       <i class="fas fa-plus pull-right"></i>
                     </a>

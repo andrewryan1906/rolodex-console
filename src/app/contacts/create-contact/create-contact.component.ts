@@ -210,6 +210,10 @@ export class CreateContactComponent implements OnInit {
     // get rid of the phone numbers property
     delete contactToSave.phone_numbers;
 
+    // now, let's get the phone numbers
+    this.extractAddressesFromForm(contactToSave);
+    // get rid of the phone numbers property
+    delete contactToSave.addresses;
 
     console.log(JSON.stringify(contactToSave));
 
@@ -320,6 +324,55 @@ export class CreateContactComponent implements OnInit {
     this.addresses.controls[index].get('address_lookup').disable();
 
 
+  }
+
+
+  private extractAddressesFromForm(contactToSave) {
+
+    // let's iterate and get the phone numbers
+    const addresses = this.addresses.controls;
+
+    console.log(JSON.stringify(addresses[0].value));
+    if (addresses && addresses.length > 0) {
+      const processedAddressTypes = {};
+      for (const address of addresses) {
+
+        // is this a duplicate?
+        const type = address.value.address_type;
+        if (processedAddressTypes[type]) {
+          // validation error
+          alert('Duplicate address types specified!');
+          return;
+        }
+
+        let addr = address.value;
+
+        processedAddressTypes[type] = true;
+        switch (type) {
+          case 'home':
+            contactToSave.home_address = addr;
+            break;
+
+          case 'work':
+            contactToSave.work_address = addr;
+            break;
+
+
+          case 'alternate':
+            contactToSave.alt_address = addr;
+            break;
+
+          default:
+            throw new Error('unknown phone number type ' + address.value.address_type);
+        }
+
+        delete addr.address_lookup; // this isn't part of the REST API
+        delete addr.address_type; // this isn't part of the REST API
+
+      }
+
+
+    }
   }
 
 // saves the contact record via the REST API

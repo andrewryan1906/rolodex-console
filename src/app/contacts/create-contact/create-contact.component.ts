@@ -30,6 +30,20 @@ function validatePhoneNumbers(c: AbstractControl): { [key: string]: boolean } | 
   }
 }
 
+function validateAddresses(c: AbstractControl): { [key: string]: boolean } | null {
+
+  // console.log('validating...' + JSON.stringify( c.value ));
+
+  const entriesThatHaveBeenProcessed = {};
+  for (const addressAndTypeEntry of c.value) {
+
+    if (entriesThatHaveBeenProcessed[addressAndTypeEntry.address_type])
+      return {'duplicate_address_types': true};
+
+    entriesThatHaveBeenProcessed[addressAndTypeEntry.address_type] = true;
+  }
+}
+
 
 @Component({
   templateUrl: './create-contact.component.html',
@@ -43,6 +57,9 @@ export class CreateContactComponent implements OnInit {
               private router: Router, private toastr: ToastrService) {
   }
 
+  MAX_ADDRESS_TYPES = 3;
+  MAX_PHONE_NUMBER_TYPES = 4;
+
   contact: Contact = {};
   contactForm: FormGroup;
   isSaving: boolean;    // supports the Ladda button
@@ -51,7 +68,7 @@ export class CreateContactComponent implements OnInit {
   // the name and email panels
   showAdditionalNameOptions = false;
   showAdditionalEmails = false;
-  showFullAddress = false;
+  showFullAddress = [false];
 
   ngOnInit() {
 
@@ -75,17 +92,10 @@ export class CreateContactComponent implements OnInit {
       job_title: '',
 
 
-      address: '',
-      line1: '',
-      line2: '',
-      city: '',
-      state: '',
-      postal_code: '',
-      country: '',
-
       title: '',
       contact_role_ids: '',
       phone_numbers: this.fb.array([this.buildPhoneNumberGroup()], validatePhoneNumbers),
+      addresses: this.fb.array([this.buildAddressGroup()], validateAddresses),
       certifications: '',
 
       preferred_phone_number: '',
@@ -146,7 +156,7 @@ export class CreateContactComponent implements OnInit {
   }
 
   addPhoneNumber() {
-    if (this.phone_numbers.length >= 4) {
+    if (this.phone_numbers.length >= this.MAX_PHONE_NUMBER_TYPES) {
       alert('No more phone number types are available.');
       return;
     }
@@ -250,28 +260,64 @@ export class CreateContactComponent implements OnInit {
     }
   }
 
-  hasAddressBeenPlaced = false;
 
-  handleAddressChange(address: Address) {
+  // *********** Address Management ***************************
+  //
+
+
+  get addresses(): FormArray {
+    return <FormArray> this.contactForm.get('addresses');
+  }
+
+  buildAddressGroup() {
+
+    return this.fb.group({
+
+      address_lookup: '',
+      address_type: 'Home',
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      postal_code: '',
+      country: ''
+    });
+  }
+
+  addAddress() {
+    if (this.addresses.length >= this.MAX_ADDRESS_TYPES) {
+      alert('No more address types are available.');
+      return;
+    }
+
+    this.showFullAddress.push(false);
+    this.hasAddressBeenPlaced.push(false);
+    this.addresses.push(this.buildAddressGroup());
+  }
+
+
+  hasAddressBeenPlaced: boolean[] = [false];
+
+  handleAddressChange(address: Address, index: number) {
 
     console.log(JSON.stringify(address));
     let addr = this._googlePlacesService.parseGooglePlacesAddress(address);
 
     console.log('Placed Addr: ' + JSON.stringify(addr));
 
-    this.contactForm.patchValue({
+    this.addresses.controls[index].patchValue({
       line1: addr.line1,
       line2: addr.line2,
       city: addr.city,
       state: addr.state,
       postal_code: addr.postal_code,
       country: addr.country,
-      address:  'Please edit the address below'
+      address_lookup: 'Please edit the address below'
 
     });
-    this.showFullAddress = true;
-    this.hasAddressBeenPlaced = true;
-    this.contactForm.get('address').disable(  ) ;
+    this.showFullAddress[index] = true;
+    this.hasAddressBeenPlaced[index] = true;
+    this.addresses.controls[index].get('address_lookup').disable();
 
 
   }

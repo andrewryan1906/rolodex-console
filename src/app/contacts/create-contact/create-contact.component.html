@@ -12,7 +12,6 @@
 </div>
 <form [formGroup]="contactForm" (ngSubmit)="saveChanges()">
   <div class="card mb-4 rs-max-panel-width">
-
   </div>
   <ngb-tabset class="nav-tabs-top mb-4 rs-max-panel-width contact-tabset">
     <ngb-tab title="Basic Profile">
@@ -35,7 +34,6 @@
                   <span style="color:green">New Contact Add</span>
                   <span class="d-none" style="color:blue">Existing Contact Edit [XS3rud91]</span>
                 </div>
-
               </div>
               <div class="form-group row">
                 <label class="col-form-label col-sm-2 text-sm-right ">Name:</label>
@@ -47,18 +45,14 @@
                     least give us a name.
                   </small>
                 </div>
-
                 <div class="panel-toggler">
                   <a (click)="showAdditionalNameOptions = !showAdditionalNameOptions">
-
-                    <span [ngClass]="showAdditionalNameOptions ? 'collapsed' : ''">
-                    <i
-                      class="fa fa-chevron-left pull-right "></i>
-                  </span>
-
+                        <span [ngClass]="showAdditionalNameOptions ? 'collapsed' : ''">
+                        <i
+                          class="fa fa-chevron-left pull-right "></i>
+                        </span>
                   </a>
                 </div>
-
               </div>
               <div [ngbCollapse]="!showAdditionalNameOptions">
                 <div class="form-group row">
@@ -67,7 +61,6 @@
                     <input class="form-control" formControlName="salutation" autocomplete="honorific-prefix"
                            placeholder="Mr., Mrs., Dr.">
                   </div>
-
                 </div>
                 <div class="form-group row">
                   <label class="col-form-label col-sm-2 text-sm-right offset-2">First Name:</label>
@@ -108,18 +101,15 @@
                          formControlName="email_address" autocomplete="email" type="email"
                          placeholder="example@domain.com">
                   <span class="invalid-feedback" *ngIf="shouldShowFormErrorFor('email_address')">Please enter a valid
-                    email address.
-                  </span>
-
+                        email address.
+                        </span>
                 </div>
                 <div class="panel-toggler">
                   <a (click)="showAdditionalEmails = !showAdditionalEmails">
-
-                    <span [ngClass]="showAdditionalEmails ? 'collapsed' : ''">
-                    <i
-                      class="fa fa-chevron-left pull-right "></i>
-                  </span>
-
+                        <span [ngClass]="showAdditionalEmails ? 'collapsed' : ''">
+                        <i
+                          class="fa fa-chevron-left pull-right "></i>
+                        </span>
                   </a>
                 </div>
               </div>
@@ -131,10 +121,9 @@
                            formControlName="email_address2" autocomplete="email" type="email"
                            placeholder="example@domain.com">
                     <span class="invalid-feedback" *ngIf="shouldShowFormErrorFor('email_address2')">Please enter a valid
-                    email address.
-                  </span>
+                           email address.
+                           </span>
                   </div>
-
                 </div>
                 <div class="form-group row">
                   <label class="col-form-label col-sm-2 text-sm-right ">E-Mail Address #3:</label>
@@ -143,13 +132,11 @@
                            formControlName="email_address3" autocomplete="email" type="email"
                            placeholder="example@domain.com">
                     <span class="invalid-feedback" *ngIf="shouldShowFormErrorFor('email_address3')">Please enter a valid
-                    email address.
-                  </span>
+                           email address.
+                           </span>
                   </div>
-
                 </div>
               </div>
-
               <div formArrayName="phone_numbers"
                    *ngFor="let phone_number of phone_numbers.controls; let i=index">
                 <div class="form-group row" [formGroupName]="i">
@@ -160,7 +147,6 @@
                            placeholder="(xxx) xxx-xxxx">
                   </div>
                   <div class="col-sm-1"></div>
-
                   <div class="col-sm-3 ">
                     <select class="form-control" formControlName="phone_number_type"
                             [ngClass]="phone_numbers.errors ? 'is-invalid' : ''">
@@ -170,101 +156,86 @@
                       <option value="alternate">Alternate</option>
                     </select>
                     <span class="invalid-feedback" *ngIf="phone_numbers.errors || true  ">
-                     You've specified the same phone number type multiple times.
-                       </span>
+                           You've specified the same phone number type multiple times.
+                           </span>
                   </div>
                   <!-- We only want to show the plus sign for the first element, and only when there's 3 or less -->
                   <div class="dynamic-row-add col-sm-1"
-                       [ngClass]="i ==0 && phone_numbers.controls.length <= 3 ? ''  : 'd-none'">
+                       [ngClass]="i ==0 && phone_numbers.controls.length <= MAX_PHONE_NUMBER_TYPES ? ''  : 'd-none'">
                     <a (click)="addPhoneNumber()">
                       <i class="fas fa-plus pull-right"></i>
                     </a>
                   </div>
-
-
                 </div>
-
               </div>
-              <div class="form-group row">
-                <label class="col-form-label col-sm-2 text-sm-right">Address:</label>
-                <div class="col-sm-5">
-                  <input class="form-control" autocomplete="street-address"
-                        formControlName="address"
-                         ngx-google-places-autocomplete (onAddressChange)="handleAddressChange($event)"
-                         placeholder="508 Saint Cloud Road, Bel Air, MD 21014">
+              <div formArrayName="addresses"
+                   *ngFor="let address of addresses.controls; let j=index">
+                <div [formGroupName]="j">
+                  <div class="form-group row">
+                    <label class="col-form-label col-sm-2 text-sm-right">Address:</label>
+                    <div class="col-sm-5">
+                      <input class="form-control" autocomplete="street-address"
+                             formControlName="address_lookup"
+                             ngx-google-places-autocomplete (onAddressChange)="handleAddressChange($event, j)"
+                             placeholder="508 Saint Cloud Road, Bel Air, MD 21014">
+                    </div>
+                    <div class="panel-toggler col-sm-1">
+                      <a (click)="showFullAddress[j] = !showFullAddress[j]" [ngClass]="hasAddressBeenPlaced[j] ? 'd-none' : ''">
+                           <span [ngClass]="showFullAddress[j] ? 'collapsed' : ''">
+                           <i
+                             class="fa fa-chevron-left pull-right "></i>
+                           </span>
+                      </a>
+                    </div>
+                    <div class="col-sm-3 ">
+                      <select class="form-control" formControlName="address_type">
+                        <option>Home</option>
+                        <option>Work</option>
+                        <option>Alternate</option>
+                      </select>
+                    </div>
+                    <label class="col-form-label col-sm-1 text-sm-left"><i class="fas fa-plus pull-right"></i></label>
+                  </div>
+                  <div [ngbCollapse]="!showFullAddress[j]">
+                    <div class="form-group row">
+                      <label class="col-form-label col-sm-2 text-sm-right ">Line 1:</label>
+                      <div class="col-sm-6">
+                        <input class="form-control" placeholder="508 Saint Cloud Road" formControlName="line1">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-form-label col-sm-2 text-sm-right ">Line 2:</label>
+                      <div class="col-sm-6">
+                        <input class="form-control" placeholder="Apartment #1906" formControlName="line2">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-form-label col-sm-2 text-sm-right ">City:</label>
+                      <div class="col-sm-6">
+                        <input class="form-control" placeholder="Bel Air" formControlName="city">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-form-label col-sm-2 text-sm-right ">State:</label>
+                      <div class="col-sm-6">
+                        <input class="form-control" placeholder="MD" formControlName="state">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-form-label col-sm-2 text-sm-right ">Postal Code:</label>
+                      <div class="col-sm-6">
+                        <input class="form-control" placeholder="21015" formControlName="postal_code">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-form-label col-sm-2 text-sm-right ">Country:</label>
+                      <div class="col-sm-6">
+                        <input class="form-control" placeholder="21015" formControlName="country">
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="panel-toggler col-sm-1">
-                  <a (click)="showFullAddress = !showFullAddress" [ngClass]="hasAddressBeenPlaced ? 'd-none' : ''">
-
-                    <span [ngClass]="showFullAddress ? 'collapsed' : ''">
-                    <i
-                      class="fa fa-chevron-left pull-right "></i>
-                  </span>
-
-                  </a>
-                </div>
-
-
-                <div class="col-sm-3 ">
-                  <select class="form-control">
-                    <option>Home</option>
-                    <option>Work</option>
-                    <option>Alternate</option>
-                  </select>
-                </div>
-                <label class="col-form-label col-sm-1 text-sm-left"><i class="fas fa-plus pull-right"></i></label>
               </div>
-
-
-              <div [ngbCollapse]="!showFullAddress">
-                <div class="form-group row">
-                  <label class="col-form-label col-sm-2 text-sm-right ">Line 1:</label>
-                  <div class="col-sm-6">
-                    <input class="form-control" placeholder="508 Saint Cloud Road" formControlName="line1">
-                  </div>
-
-                </div>
-                <div class="form-group row">
-                  <label class="col-form-label col-sm-2 text-sm-right ">Line 2:</label>
-                  <div class="col-sm-6">
-                    <input class="form-control" placeholder="Apartment #1906" formControlName="line2">
-                  </div>
-
-                </div>
-
-                <div class="form-group row">
-                  <label class="col-form-label col-sm-2 text-sm-right ">City:</label>
-                  <div class="col-sm-6">
-                    <input class="form-control" placeholder="Bel Air" formControlName="city">
-                  </div>
-
-                </div>
-                <div class="form-group row">
-                  <label class="col-form-label col-sm-2 text-sm-right ">State:</label>
-                  <div class="col-sm-6">
-                    <input class="form-control" placeholder="MD" formControlName="state">
-                  </div>
-
-                </div>
-
-                <div class="form-group row">
-                  <label class="col-form-label col-sm-2 text-sm-right ">Postal Code:</label>
-                  <div class="col-sm-6">
-                    <input class="form-control" placeholder="21015" formControlName="postal_code">
-                  </div>
-
-                </div>
-                <div class="form-group row">
-                  <label class="col-form-label col-sm-2 text-sm-right ">Postal Code:</label>
-                  <div class="col-sm-6">
-                    <input class="form-control" placeholder="21015" formControlName="country">
-                  </div>
-
-                </div>
-
-              </div>
-
-
               <div class="form-group row">
                 <label class="col-form-label col-sm-2 text-sm-right">Organization:</label>
                 <div class="col-sm-4">
@@ -272,10 +243,8 @@
                 </div>
                 <label class="col-form-label col-sm-2 text-sm-right">Job Title:</label>
                 <div class="col-sm-4">
-
                   <input class="form-control" formControlName="job_title" type="text" autocomplete="organization-title">
                 </div>
-
               </div>
               <div class="form-group row">
                 <label class="col-form-label col-sm-2 text-sm-right">Role(s):</label>
@@ -284,10 +253,8 @@
                 </div>
                 <label class="col-form-label col-sm-2 text-sm-right">Credentials:</label>
                 <div class="col-sm-4">
-
                   <input class="form-control" formControlName="certifications" type="text">
                 </div>
-
               </div>
             </div>
           </div>
@@ -297,11 +264,9 @@
     <ngb-tab title="Additional Profile Information">
       <ng-template ngbTabContent>
         <div class="card-body ">
-
           <div class="row">
             <div class="form-group col-sm-4">
               <label class="form-label ">Gender:</label>
-
               <select class="form-control" autocomplete="sex">
                 <option>Male</option>
                 <option>Female</option>
@@ -309,59 +274,46 @@
             </div>
             <div class="form-group col-sm-4">
               <label class="form-label ">Date of Birth:</label>
-
               <input class="form-control" type="text" placeholder="mm/dd/yyyy" autocomplete="bday">
             </div>
           </div>
           <div class="row">
             <div class="form-group col-sm-10">
               <label class="form-label ">Notes:</label>
-
               <textarea class="form-control" placeholder="Any pertinent notes, info, etc."
                         rows="5"
                         formControlName="notes"></textarea>
             </div>
           </div>
-
         </div>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="Social Networks">
       <ng-template ngbTabContent>
-
         <div class="card-body ">
-
           <div class="form-group row">
             <label class="col-form-label col-sm-2 text-sm-right"><i class="fab fa-facebook"></i> Facebook:</label>
             <div class="col-sm-8 " style="line-height: 35px">
               <input class="form-control" type="text">
             </div>
-
           </div>
-
-
           <div class="form-group row">
             <label class="col-form-label col-sm-2 text-sm-right"> <i class="fab fa-instagram"></i> Instagram:</label>
             <div class="col-sm-8 " style="line-height: 35px">
               <input class="form-control" type="text">
             </div>
-
           </div>
-
           <div class="form-group row">
             <label class="col-form-label col-sm-2 text-sm-right"> <i class="fab fa-twitter-square"></i> Twitter Handle:</label>
             <div class="col-sm-8 " style="line-height: 35px">
               <input class="form-control" type="text">
             </div>
-
           </div>
-
           <div class="form-group row">
             <label class="col-form-label col-sm-2 text-sm-right"> <i class="fab fa-linkedin-in"></i> LinkedIn:</label>
             <div class="col-sm-8 " style="line-height: 35px">
               <input class="form-control" type="text">
             </div>
-
           </div>
         </div>
       </ng-template>
@@ -369,18 +321,13 @@
     <ngb-tab title="Custom Demographics">
       <ng-template ngbTabContent>
         <div class="card-body ">
-
           <div class="row" class="p-lg-5">
             No custom demographics have been configured.
           </div>
-
-
         </div>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
-
-
   <div class="row rs-max-panel-width  ">
     <div class="col-md-12  ">
       <div class="form-group " style="text-align: center">

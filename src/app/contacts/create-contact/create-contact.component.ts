@@ -10,6 +10,16 @@ import {Contact} from '@rhythmsoftware/rolodex-angular-sdk/model/contact';
 import * as  googlePhoneNumberLib from 'google-libphonenumber';
 import {Address} from 'ngx-google-places-autocomplete/objects/address';
 import {GooglePlacesService} from '../../services/google-places/google-places.service';
+import {AlgoliaKeyManagementService} from '../../services/algolia/algolia-key-management.service';
+import {Observable} from 'rxjs';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/switchMap';
+import * as algoliasearch from 'algoliasearch';
+import {SecurityContextService} from '../../services/security-context/security-context.service';
+import {Organization} from '@rhythmsoftware/rolodex-angular-sdk/model/organization';
+import {OrganizationsService} from '@rhythmsoftware/rolodex-angular-sdk/api/organizations.service';
 
 
 // This method checks to make sure you don't have two phone numbers with the same type
@@ -19,12 +29,14 @@ function validatePhoneNumbers(c: AbstractControl): { [key: string]: boolean } | 
 
   const entriesThatHaveBeenProcessed = {};
   for (const phoneAndTypeEntry of c.value) {
-    if (!phoneAndTypeEntry.phone_number || phoneAndTypeEntry.phone_number.trim() === '')
-      continue;   // don't bother if no phone
+    if (!phoneAndTypeEntry.phone_number || phoneAndTypeEntry.phone_number.trim() === '') {
+      continue;
+    }   // don't bother if no phone
 
 
-    if (entriesThatHaveBeenProcessed[phoneAndTypeEntry.phone_number_type])
+    if (entriesThatHaveBeenProcessed[phoneAndTypeEntry.phone_number_type]) {
       return {'duplicate_phone_number_types': true};
+    }
 
     entriesThatHaveBeenProcessed[phoneAndTypeEntry.phone_number_type] = true;
   }
@@ -38,11 +50,13 @@ function validateAddresses(c: AbstractControl): { [key: string]: boolean } | nul
 
   for (const addressAndTypeEntry of c.value) {
 
-    if ( ! addressAndTypeEntry.line1 || addressAndTypeEntry.line1.trim() === ''  )
-      continue; // don't worry about it
+    if (!addressAndTypeEntry.line1 || addressAndTypeEntry.line1.trim() === '') {
+      continue;
+    } // don't worry about it
 
-    if (entriesThatHaveBeenProcessed[addressAndTypeEntry.address_type])
+    if (entriesThatHaveBeenProcessed[addressAndTypeEntry.address_type]) {
       return {'duplicate_address_types': true};
+    }
 
     entriesThatHaveBeenProcessed[addressAndTypeEntry.address_type] = true;
   }
@@ -56,9 +70,9 @@ function validateAddresses(c: AbstractControl): { [key: string]: boolean } | nul
 export class CreateContactComponent implements OnInit {
 
 
-  constructor(private _contactsService: ContactsService, private _certificationsService: CertificationsService,
-              private fb: FormBuilder, private _googlePlacesService: GooglePlacesService,
-              private router: Router, private toastr: ToastrService) {
+  constructor(private _contactsService: ContactsService, private _certificationsService: CertificationsService, private _organizationService: OrganizationsService,
+              private fb: FormBuilder, private _googlePlacesService: GooglePlacesService, private _algoliaKeyManagementService: AlgoliaKeyManagementService,
+              private router: Router, private toastr: ToastrService, private  securityContext: SecurityContextService) {
   }
 
   MAX_ADDRESS_TYPES = 3;
@@ -74,11 +88,27 @@ export class CreateContactComponent implements OnInit {
   showAdditionalEmails = false;
   showFullAddress = [false];
 
+
   ngOnInit() {
 
     this.initFormGroup();
 
     this.initControls();
+
+    this.initAlgolia();
+  }
+
+  initAlgolia(): void {
+
+    this._algoliaKeyManagementService.GetSecureApiKey(this.securityContext.GetCurrentTenant(), 'rolodex-organizations').subscribe(
+      key => {// populate the index
+        this.alogliaClient = algoliasearch(key.application_id, key.api_key);
+        this.algoliaOrganizationIndex = this.alogliaClient.initIndex(key.index_name);
+
+        // enable the search
+        this.contactForm.get('organization_id').enable();
+      });
+
   }
 
 
@@ -92,7 +122,7 @@ export class CreateContactComponent implements OnInit {
       last_name: '',
       suffix: '',
       nickname: '',
-      organization_id: '',
+      organization_id: {value: '', disabled: true}, // disabled until initialized
       job_title: '',
 
 
@@ -170,6 +200,10 @@ export class CreateContactComponent implements OnInit {
   formatPhoneNumber(index: number) {
 
     const phone = this.phone_numbers.controls[index].get('phone_number').value;
+
+    if (!phone || phone.trim() === '')
+      return;
+
     // console.log(index);
     // console.log(phone);
     const PNF = googlePhoneNumberLib.PhoneNumberFormat;
@@ -309,7 +343,7 @@ export class CreateContactComponent implements OnInit {
   handleAddressChange(address: Address, index: number) {
 
     console.log(JSON.stringify(address));
-    let addr = this._googlePlacesService.parseGooglePlacesAddress(address);
+    const addr = this._googlePlacesService.parseGooglePlacesAddress(address);
 
     console.log('Placed Addr: ' + JSON.stringify(addr));
 
@@ -349,7 +383,7 @@ export class CreateContactComponent implements OnInit {
           return;
         }
 
-        let addr = address.value;
+        const addr = address.value;
 
         processedAddressTypes[type] = true;
         switch (type) {
@@ -379,6 +413,32 @@ export class CreateContactComponent implements OnInit {
     }
   }
 
+  alogliaClient: algoliasearch.Client;
+  algoliaOrganizationIndex: algoliasearch.Index;
+  isNewOrganization = false;
+  searchOrganizations = (text$: Observable<string>) =>
+    text$
+      .debounceTime(200)
+      .switchMap(term => this.algoliaOrganizationIndex.search({query: term}).then((response) => response.hits));
+
+
+  formatSelectedOrganization = (x: { name: string }) => x.name;
+
+  onOrganizationFieldChanged() {
+
+
+    // we'll use set timeout to give time for the NgbTypeahead method to be called
+    setTimeout(() => {
+
+      const selectedOrganization = this.contactForm.get('organization_id').value;
+      this.isNewOrganization = typeof selectedOrganization === 'string' && selectedOrganization.trim() !== '';
+
+    }, 300);
+
+
+  }
+
+
 // saves the contact record via the REST API
   saveChanges(): void {
 
@@ -387,10 +447,41 @@ export class CreateContactComponent implements OnInit {
 
     const contactToSave = this.extractContactFromForm();
 
+    // now... do we need to save an organization?
+    let organizationObservable: Observable<Organization> = Observable.of(null);
+
+    if (typeof contactToSave.organization_id === 'object') {
+      // no, there's an ID - lets just save that
+
+      contactToSave.organization_id = contactToSave.organization_id.id;
+    } else {
+      // we have to create an organization
+      if (contactToSave.organization_id.trim() !== '') {
+        const newOrganization: Organization = {
+          name: contactToSave.organization_id,
+          main_address: contactToSave.work_address,
+          main_phone_number: contactToSave.work_phone_number
+        };
+
+        console.log('saving organization: ' + JSON.stringify(newOrganization));
+
+        organizationObservable = this._organizationService.createOrganization(this.securityContext.GetCurrentTenant(), newOrganization);
+      }
+    }
+
     // now, let's save the contact via the REST API
     // we'll output an error if unsuccessful via toaster
-    this._contactsService.createContact('tests', contactToSave)
 
+    // we run the org observable, then map it and return the contact observable, and subscribe to THAT
+    organizationObservable
+      .mergeMap(organization => {
+
+        // if an organization was saved, let's update the org id
+        if (organization)
+          contactToSave.organization_id = organization.id;
+
+        return this._contactsService.createContact(this.securityContext.GetCurrentTenant(), contactToSave);
+      })
       .subscribe((contact) => this.router.navigate(['/contacts', contact.id]),
         (err) => {
 
@@ -403,6 +494,7 @@ export class CreateContactComponent implements OnInit {
           });
           this.isSaving = false;
         });
-
   }
+
+}
 }

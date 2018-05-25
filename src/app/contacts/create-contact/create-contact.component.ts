@@ -232,7 +232,7 @@ export class CreateContactComponent implements OnInit {
   }
 
   shouldShowFormErrorFor(field: string) {
-    return this.contactForm.controls[field].errors && this.contactForm.controls[field].touched && this.contactForm.controls[field].dirty;
+    return this.contactForm.get(field).errors && this.contactForm.get(field).touched;
   }
 
   shouldShowFormErrorForControl(field: AbstractControl) {

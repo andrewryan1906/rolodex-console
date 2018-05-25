@@ -90,7 +90,8 @@
                 <div class="form-group row">
                   <label class="col-form-label col-sm-2 text-sm-right offset-2">Suffix:</label>
                   <div class="col-sm-4">
-                    <input class="form-control" formControlName="suffix" autocomplete="honorific-suffix" placeholder="Jr., Sr., III, IV">
+                    <input class="form-control" formControlName="suffix" autocomplete="honorific-suffix"
+                           placeholder="Jr., Sr., III, IV">
                   </div>
                 </div>
                 <div class="form-group row">
@@ -148,23 +149,40 @@
 
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-form-label col-sm-2 text-sm-right">Phone Number:</label>
-                <div class="col-sm-5">
-                  <input class="form-control" autocomplete="tel" formControlName="phone_number"  (blur)="formatPhoneNumber()"
-                         placeholder="(xxx) xxx-xxxx">
+
+              <div formArrayName="phone_numbers"
+                   *ngFor="let phone_number of phone_numbers.controls; let i=index">
+                <div class="form-group row" [formGroupName]="i">
+                  <label class="col-form-label col-sm-2 text-sm-right">Phone Number:</label>
+                  <div class="col-sm-5">
+                    <input class="form-control" autocomplete="tel" formControlName="phone_number"
+                           (blur)="formatPhoneNumber(i)"
+                           placeholder="(xxx) xxx-xxxx">
+                  </div>
+                  <div class="col-sm-1"></div>
+
+                  <div class="col-sm-3 ">
+                    <select class="form-control" formControlName="phone_number_type"
+                            [ngClass]="phone_numbers.errors ? 'is-invalid' : ''">
+                      <option value="mobile">Mobile</option>
+                      <option value="home">Home</option>
+                      <option value="work">Work</option>
+                      <option value="alternate">Alternate</option>
+                    </select>
+                    <span class="invalid-feedback" *ngIf="phone_numbers.errors || true  ">
+                     You've specified the same phone number type multiple times.
+                       </span>
+                  </div>
+                  <div class="dynamic-row-add col-sm-1">
+                    <a (click)="addPhoneNumber()">
+                      <i class="fas fa-plus pull-right"></i>
+                    </a>
+                  </div>
+
+
+
                 </div>
 
-                <div class="col-sm-1"></div>
-                <div class="col-sm-3 ">
-                  <select class="form-control">
-                    <option>Mobile</option>
-                    <option>Home</option>
-                    <option>Work</option>
-                    <option>Alternate</option>
-                  </select>
-                </div>
-                <label class="col-form-label col-sm-1 text-sm-left"><i class="fas fa-plus pull-right"></i></label>
               </div>
               <div class="form-group row">
                 <label class="col-form-label col-sm-2 text-sm-right">Address:</label>

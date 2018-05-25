@@ -1,13 +1,32 @@
 import {Component, OnInit} from '@angular/core';
 import {ContactsService} from '@rhythmsoftware/rolodex-angular-sdk/api/contacts.service';
 import {CertificationsService} from '../../services/certifications/certifications.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import clean from 'lodash-clean';
 import * as nameParser from 'parse-full-name';
 import {Contact} from '@rhythmsoftware/rolodex-angular-sdk/model/contact';
 import * as  googlePhoneNumberLib from 'google-libphonenumber';
+
+
+// This method checks to make sure you don't have two phone numbers with the same type
+function validatePhoneNumbers(c: AbstractControl): { [key: string]: boolean } | null {
+
+  //console.log('validating...' + JSON.stringify( c.value ));
+
+  const entriesThatHaveBeenProcessed = {};
+  for (const phoneAndTypeEntry of c.value) {
+    if (!phoneAndTypeEntry.phone_number || phoneAndTypeEntry.phone_number.trim() === '')
+      continue;   // don't bother if no phone
+
+
+    if (entriesThatHaveBeenProcessed[phoneAndTypeEntry.phone_number_type])
+      return {'duplicate_phone_number_types': true};
+
+    entriesThatHaveBeenProcessed[phoneAndTypeEntry.phone_number_type] = true;
+  }
+}
 
 
 @Component({
@@ -56,10 +75,9 @@ export class CreateContactComponent implements OnInit {
       work_phone_number: '',
       title: '',
       contact_role_ids: '',
-      home_phone_number: '',
+      phone_numbers: this.fb.array([this.buildPhoneNumberGroup()], validatePhoneNumbers),
       certifications: '',
-      alt_phone_number: '',
-      mobile_phone_number: '',
+
       preferred_phone_number: '',
       preferred_address: '',
       gender: '',
@@ -104,11 +122,34 @@ export class CreateContactComponent implements OnInit {
 
   }
 
-  formatPhoneNumber() {
+  get phone_numbers(): FormArray {
+    return <FormArray> this.contactForm.get('phone_numbers');
+  }
 
-    const phone = this.contactForm.get('phone_number').value;
+  buildPhoneNumberGroup() {
+
+    return this.fb.group({
+
+      phone_number: '',
+      phone_number_type: 'mobile'
+    });
+  }
+
+  addPhoneNumber() {
+    if (this.phone_numbers.length >= 4) {
+      alert('No more phone number types are available.');
+      return;
+    }
+    this.phone_numbers.push(this.buildPhoneNumberGroup());
+  }
+
+  formatPhoneNumber(index: number) {
+
+    const phone = this.phone_numbers.controls[index].get('phone_number').value;
+    // console.log(index);
+    // console.log(phone);
     const PNF = googlePhoneNumberLib.PhoneNumberFormat;
-    console.log('phone');
+
 
     const phoneUtil = googlePhoneNumberLib.PhoneNumberUtil.getInstance();
 
@@ -116,10 +157,9 @@ export class CreateContactComponent implements OnInit {
 
 
     const typeOfFormat = phoneUtil.getRegionCodeForNumber(number) === 'US' ? PNF.NATIONAL : PNF.INTERNATIONAL;
-    const formattedPhone =  phoneUtil.format(number,  typeOfFormat);
+    const formattedPhone = phoneUtil.format(number, typeOfFormat);
 
-
-    this.contactForm.patchValue({phone_number: formattedPhone});
+    this.phone_numbers.controls[index].patchValue({phone_number: formattedPhone});
 
 
   }
@@ -137,15 +177,77 @@ export class CreateContactComponent implements OnInit {
     return this.contactForm.controls[field].errors && this.contactForm.controls[field].touched;
   }
 
+  shouldShowFormErrorForControl(field: AbstractControl) {
+    return field.errors; // && field.touched;
+  }
 
-  // saves the contact record via the REST API
+
+  extractContactFromForm(): Contact {
+    const contactToSave = this.contactForm.value;
+
+    // now, let's get the phone numbers
+    this.extractPhoneNumbersFromForm(contactToSave);
+    // get rid of the phone numbers property
+    delete contactToSave.phone_numbers;
+
+
+    console.log(JSON.stringify(contactToSave));
+
+    return clean(contactToSave );
+  }
+
+  private extractPhoneNumbersFromForm(contactToSave) {
+
+    // let's iterate and get the phone numbers
+    const phoneNumbers = this.phone_numbers.controls;
+    if (phoneNumbers && phoneNumbers.length > 0) {
+      const processedPhoneNumbers = {};
+      for (const phoneNumber of phoneNumbers) {
+
+        // is this a duplicate?
+        const type = phoneNumber.value.phone_number_type;
+        if (processedPhoneNumbers[type]) {
+          // validation error
+          alert('Duplicate phone number types specified!');
+          return;
+        }
+
+        processedPhoneNumbers[type] = true;
+        switch (type) {
+          case 'home':
+            contactToSave.home_phone_number = phoneNumber.value.phone_number;
+            break;
+
+          case 'work':
+            contactToSave.work_phone_number = phoneNumber.value.phone_number;
+            break;
+
+          case 'mobile':
+            contactToSave.mobile_phone_number = phoneNumber.value.phone_number;
+            break;
+
+          case 'alternate':
+            contactToSave.alt_phone_number = phoneNumber.value.phone_number;
+            break;
+
+          default:
+            throw new Error('unknown phone number type ' + phoneNumber.value.phone_number_type);
+        }
+
+      }
+
+
+    }
+  }
+
+
+// saves the contact record via the REST API
   saveChanges(): void {
 
     this.toastr.clear();
     this.isSaving = true;
 
-    const contactToSave = clean(this.contactForm.value);
-
+    const contactToSave = this.extractContactFromForm();
 
     // now, let's save the contact via the REST API
     // we'll output an error if unsuccessful via toaster

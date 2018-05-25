@@ -92,9 +92,10 @@
     "zone.js": "0.8.26"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "~0.6.3",
     "@angular/cli": "^6.0.3",
     "@angular/compiler-cli": "6.0.3",
-    "@angular/language-service": "6.0.3",
+    "@angular/language-service": "^6.0.3",
     "@types/chartist": "0.9.39",
     "@types/jasmine": "2.8.7",
     "@types/jasminewd2": "2.0.3",
@@ -111,8 +112,7 @@
     "protractor": "5.3.2",
     "ts-node": "6.0.3",
     "tslint": "5.10.0",
-    "typescript": ">=2.7.0 <2.8.0",
-    "@angular-devkit/build-angular": "~0.6.3"
+    "typescript": ">=2.7.0 <2.8.0"
   },
   "resolutions": {
     "@angular/cli/node-sass": "4.7.2"
